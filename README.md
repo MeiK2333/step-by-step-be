@@ -1,2 +1,2 @@
 # StepByStep
-A training plan system for OI/ACM http://sbs.while1.top/
+已经不知道是第几版的StepByStep
