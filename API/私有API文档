@@ -1,0 +1,309 @@
+组织(Org)API:
+    验证登录:
+        URL: /API/CheckLogin
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "userName": 管理员用户名,
+                "passWord": 管理员密码,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "orgId": 组织ID,
+                    "userId": 管理员ID,
+                    "userName": 管理员用户名,
+                    "nickName": 管理员昵称,
+                    "orgName": 组织名,
+                    "shortName": 组织简称,
+                }
+        验证成功后会使该用户登录
+
+    新建组织管理员:
+        URL: /API/Org/CreateOrgAdmin
+        请求类型: POST
+        请求参数
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "orgId": 组织ID,
+                "userName": 管理员用户名,
+                "nickName": 管理员昵称,
+                "passWord": 管理员密码,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "orgId": 组织ID,
+                    "userId": 管理员ID,
+                    "userName": 管理员用户名,
+                    "nickName": 管理员昵称,
+                    "orgName": 组织名,
+                    "shortName": 组织简称,
+                }
+            }
+        调用此API需要SuperUser权限
+    
+    修改组织管理员:
+        URL: /API/Org/UpdataOrgAdmin
+        请求类型: POST
+        请求参数
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "orgId": 组织ID,
+                "userId": 管理员ID,
+                "userName": 管理员用户名,
+                "nickName": 管理员昵称,
+                "passWord": 管理员密码,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "orgId": 组织ID,
+                    "userId": 管理员ID,
+                    "userName": 管理员用户名,
+                    "nickName": 管理员昵称,
+                    "orgName": 组织名,
+                    "shortName": 组织简称,
+                }
+            }
+        调用此API需要SuperUser权限
+    
+    删除组织管理员:
+        URL: /API/Org/DeleteOrgAdmin
+        请求类型: POST
+        请求参数
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "orgId": 组织ID,
+                "userId": 管理员ID,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+            }
+        调用此API需要SuperUser权限
+    
+    新建组织:
+        URL: /API/Org/CreateOrg
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "name": 组织名,
+                "shortName": 组织简称,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "id": 组织ID,
+                    "name": 组织名,
+                    "shortName": 组织简称,
+                }
+            }
+        调用此API需要SuperUser权限
+    
+    修改组织:
+        URL: /API/Org/UpdataOrg
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 组织ID,
+                "name": 组织名,
+                "shortName": 组织简称,
+            }
+        返回参数:
+            {
+                "Status": 本次操作状态，值为false或true
+                "data": {
+                    "id": 组织ID,
+                    "name": 组织名,
+                    "shortName": 组织简称,
+                }
+            }
+        调用此API需要SuperUser权限
+    
+    删除组织:
+        URL: /API/Org/DeleteOrg
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 组织ID,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true
+            }
+        调用此API需要SuperUser权限
+
+
+用户(User)API:
+    用户登录:
+        ......
+    新增计划:
+        URL: /API/Step/CreateStep
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "orgId": 组织ID,
+                "title": 计划名,
+                "source": 计划平台,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "id": 计划ID,
+                    "title": 计划名,
+                    "source": 计划平台,
+                }
+            }
+        调用此API需要SuperUser权限或对应Org的权限
+    
+    修改计划:
+        URL: /API/Step/UpdataStep
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 计划ID,
+                "title": 计划名,
+                "source": 计划平台,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true
+                "data": {
+                    "orgId": 组织ID,
+                    "id": 计划ID,
+                    "title": 计划名,
+                    "source": 计划平台,
+                }
+            }
+        调用此API需要SuperUser权限或对应Org的权限
+    
+    删除计划:
+        URL: /API/Step/DeleteStep
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 计划ID,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true
+            }
+        调用此API需要SuperUser权限或对应Org的权限
+    
+    为计划上传Excel格式的题目:
+        URL: /API/Step/UpStepExcel
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                文件流,
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 计划ID,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "orgId": 组织ID,
+                    "ordName": 组织名,
+                    "id": 计划ID,
+                    "title": 计划名,
+                    "source": 计划平台,
+                }
+                "list": {
+                    ......(解析后的Excel内容),
+                }
+            }
+        调用此API需要SuperUser权限或对应Org的权限
+    
+    上传Excel格式的用户信息:
+        URL: /API/Step/UpUserExcel
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                文件流,
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 计划ID,
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "orgId": 组织ID,
+                    "ordName": 组织名,
+                    "id": 计划ID,
+                    "title": 计划名,
+                    "source": 计划平台,
+                }
+                "list": {
+                    ......(解析后的Excel内容),
+                }
+            }
+    
+    为计划添加用户:
+        URL: /API/Step/AddStepUser
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 计划ID,
+                "userName": 用户名(对SDUT为uid),
+                "nickName": 在此计划中的名字,
+                "class": 所在班级
+            }
+        返回参数:
+            {
+                "status": 本次操作状态，值为false或true,
+                "data": {
+                    "orgId": 组织ID,
+                    "ordName": 组织名,
+                    "id": 计划ID,
+                    "title": 计划名,
+                    "source": 计划平台,
+                    "userName": 用户名(对SDUT为uid),
+                    "nickName": 在此计划中的名字,
+                    "class": 所在班级
+                }
+            }
+        调用此API需要SuperUser权限或对应Org的权限，需确保用户名已被验证通过
+    
+    在计划中移除用户:
+        URL: /API/Step/DelStepUser
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "id": 计划ID,
+                "userName": 用户名(对SDUT为uid),
+            }
+        返回参数:
+            {
+                "status":  本次操作状态，值为false或true,
+            }
+        调用此API需要SuperUser权限或对应Org的权限

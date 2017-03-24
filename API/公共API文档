@@ -1,0 +1,129 @@
+检查账号API:
+    检查账号是否存在:
+        URL: /API/CheckUser
+        请求类型: GET
+        请求参数: ?source={平台}&userName={用户名}
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "userName": 用户名,
+                "uid": 用户UID(仅限SDUT),
+            }
+    
+    检查账号与密码是否匹配:
+        URL: /API/CheckLogin
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "userName": 用户名,
+                "passWord": 密码,
+                "source": 平台(POJ/HDU/SDUT/BC/CF),
+            }
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "userName": 用户名,
+                "uid": 用户UID(仅限SDUT),
+            }
+
+获取内容API:
+    获取所有的组织(Org):
+        URL: /API/GetOrgList
+        请求类型: GET
+        请求参数: NULL
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "count": 组织个数,
+                "list": [
+                    {
+                        "id": 组织ID,
+                        "name": 组织名,
+                        "shortName": 组织简称,
+                    },
+                    ......
+                ],
+            }
+    
+    获取某组织所有的计划:
+        URL: /API/GetStepList
+        请求类型: GET
+        请求参数: ?orgId={组织ID}
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "count": 计划个数,
+                "list": [
+                    {
+                        "id": 计划ID,
+                        "title": 计划名,
+                        "userCount": 计划参与人数,
+                        "problemCount": 计划题数,
+                        "allAcCount": 计划总完成题数,
+                    },
+                    ......
+                ],
+            }
+    
+    获取某计划的内容:
+        URL: /API/GetStep
+        请求类型: GET
+        请求参数: ?stepId={计划ID}
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "problemList": [
+                    ......
+                ],
+                "userList": [
+                    ......
+                ],
+                "data": [
+                    {
+                        "userName": 用户名,
+                        "1000": "2015-09-21 22:22:22",
+                        ......(做题情况)
+                    },
+                    ......
+                ],
+            }
+    
+    获取某人参加的所有计划:
+        URL: /API/GetUserStepList
+        请求类型: GET
+        请求参数: ?source={此账号平台}&userName={用户名(对SDUT为uid)}
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "list": [
+                    {
+                        "id": 计划ID,
+                        "title": 计划名,
+                    },
+                    ......
+                ],
+            }
+    
+    获取某人在某计划中的做题情况:
+        URL: /API/GetUserStep
+        请求类型: GET
+        请求参数: ?stepId={计划ID}&userName={用户名(对SDUT为uid)}
+        返回参数:
+            {
+                "status": 状态，false或true,
+                "problemList": [
+                    ......
+                ],
+                "data": {
+                    "userName": 用户名,
+                    "1000": "2015-09-21 22:22:22",
+                    ......(做题情况)
+                },
+            }
+    
+    获取某计划的参与用户:
+        URL: /API/GetStepUser
+    
+    获取某计划的题目:
+        URL: /API/GetStepProblem

@@ -1,0 +1,587 @@
+{
+    "title": "数据结构",
+    "problemCount": 103,
+    "source": "SDUT",
+    "userList": [
+        {
+            "name": "2K",
+            "class": "rj1501",
+            "count": 1,
+            "userName": "18978"
+        },
+        {
+            "name":"CYK",
+            "class": "rj1501",
+            "count": 1,
+            "userName": "18980"
+        },
+        {
+            "name":"MeiK",
+            "class": "rj1501",
+            "count": 2,
+            "userName": "18953"
+        },
+        {
+            "name": "李东庆",
+            "class": "jk1608",
+            "count": 100,
+            "userName": "23102"
+        }
+    ],
+    "problemList": [
+        {
+            "problem": "1000",
+            "title": "A+B Problem",
+            "ZX": "实验一",
+            "ZX_len": 2,
+            "ZT": "基础",
+            "ZT_len": 1
+        },
+        {
+            "problem": "1110",
+            "title": "C语言实验-Hello World！(printf练习)",
+            "ZT": "进阶",
+            "ZT_len": 1
+        },
+        {
+            "title": "",
+            "ZX": "实验1-顺序表",
+            "ZX_len": 7,
+            "ZT": "顺序表基本操作",
+            "ZT_len": 5,
+            "problem": "1130"
+        },
+        {
+            "title": "",
+            "problem": "3324"
+        },
+        {
+            "title": "",
+            "problem": "3325"
+        },
+        {
+            "title": "",
+            "problem": "3326"
+        },
+        {
+            "title": "",
+            "problem": "3327"
+        },
+        {
+            "title": "",
+            "ZT": "顺序表归并",
+            "ZT_len": 1,
+            "problem": "3329"
+        },
+        {
+            "title": "",
+            "ZT": "顺序表应用",
+            "ZT_len": 1,
+            "problem": "3330"
+        },
+        {
+            "title": "",
+            "ZX": "实验2-链表",
+            "ZX_len":14,
+            "ZT": "线性链表",
+            "ZT_len": 9,
+            "problem": "1138"
+        },
+        {
+            "title": "",
+            "problem": "1139"
+        },
+        {
+            "title": "",
+            "problem": "2116"
+        },
+        {
+            "title": "",
+            "problem": "2117"
+        },
+        {
+            "title": "",
+            "problem": "2118"
+        },
+        {
+            "title": "",
+            "problem": "2119"
+        },
+        {
+            "title": "",
+            "problem": "2120"
+        },
+        {
+            "title": "",
+            "problem": "2121"
+        },
+        {
+            "title": "",
+            "problem": "2122"
+        },
+        {
+            "title": "",
+            "ZT": "双向链表",
+            "ZT_len": 1,
+            "problem": "2054"
+        },
+        {
+            "title": "",
+            "ZT": "循环链表",
+            "ZT_len": 4,
+            "problem": "1197"
+        },
+        {
+            "title": "",
+            "problem": "2056"
+        },
+        {
+            "title": "",
+            "problem": "2504"
+        },
+        {
+            "title": "",
+            "problem": "1482"
+        },
+        {
+            "title": "",
+            "ZX": "实验3-栈和队列",
+            "ZX_len":16,
+            "ZT": "进制转化",
+            "ZT_len": 2,
+            "problem": "2131"
+        },
+        {
+            "title": "",
+            "problem": "1252"
+        },
+        {
+            "title": "",
+            "ZT": "表达式求值",
+            "ZT_len": 3,
+            "problem": "2132"
+        },
+        {
+            "title": "",
+            "problem": "2133"
+        },
+        {
+            "title": "",
+            "problem": "2484"
+        },
+        {
+            "title": "",
+            "ZT": "括号匹配",
+            "ZT_len": 1,
+            "problem": "2134"
+        },
+        {
+            "title": "",
+            "ZT": "栈操作",
+            "ZT_len": 4,
+            "problem": "3332"
+        },
+        {
+            "title": "",
+            "problem": "3333"
+        },
+        {
+            "title": "",
+            "problem": "3334"
+        },
+        {
+            "title": "",
+            "problem": "3335"
+        },
+        {
+            "title": "",
+            "ZT": "行编辑器",
+            "ZT_len": 1,
+            "problem": "1479"
+        },
+        {
+            "title": "",
+            "ZT": "深度优先搜索",
+            "ZT_len": 1,
+            "problem": "2449"
+        },
+        {
+            "title": "",
+            "ZT": "双向队列",
+            "ZT_len": 1,
+            "problem": "1466"
+        },
+        {
+            "title": "",
+            "ZT": "栈和队列",
+            "ZT_len": 2,
+            "problem": "2087"
+        },
+        {
+            "title": "",
+            "problem": "2088"
+        },
+        {
+            "title": "",
+            "ZT": "队列",
+            "ZT_len": 1,
+            "problem": "2135"
+        },
+        {
+            "title": "",
+            "ZX": "实验4-串、数组",
+            "ZX_len": 8,
+            "ZT": "字符串连接",
+            "ZT_len": 1,
+            "problem": "2124"
+        },
+        {
+            "title": "",
+            "ZT": "字符串匹配",
+            "ZT_len": 3,
+            "problem": "2772"
+        },
+        {
+            "title": "",
+            "problem": "2125"
+        },
+        {
+            "title": "",
+            "problem": "3311"
+        },
+        {
+            "title": "",
+            "ZT": "字符串操作",
+            "ZT_len": 1,
+            "problem": "2463"
+        },
+        {
+            "title": "",
+            "ZT": "字符串哈希",
+            "ZT_len": 1,
+            "problem": "1500"
+        },
+        {
+            "title": "",
+            "ZT": "数组操作",
+            "ZT_len": 2,
+            "problem": "3348"
+        },
+        {
+            "title": "",
+            "problem": "3347"
+        },
+        {
+            "title": "",
+            "ZX": "实验5-树和二叉树",
+            "ZX_len":13,
+            "ZT": "树的同构",
+            "ZT_len": 1,
+            "problem": "3340"
+        },
+        {
+            "title": "",
+            "ZT": "树的遍历",
+            "ZT_len": 4,
+            "problem": "3341"
+        },
+        {
+            "title": "",
+            "problem": "2137"
+        },
+        {
+            "title": "",
+            "problem": "2128"
+        },
+        {
+            "title": "",
+            "problem": "2136"
+        },
+        {
+            "title": "",
+            "ZT": "二叉树操作",
+            "ZT_len": 5,
+            "problem": "3342"
+        },
+        {
+            "title": "",
+            "problem": "3343"
+        },
+        {
+            "title": "",
+            "problem": "3344"
+        },
+        {
+            "title": "",
+            "problem": "3346"
+        },
+        {
+            "title": "",
+            "problem": "2482"
+        },
+        {
+            "title": "",
+            "ZT": "哈夫曼树",
+            "ZT_len": 2,
+            "problem": "3345"
+        },
+        {
+            "title": "",
+            "problem": "2127"
+        },
+        {
+            "title": "",
+            "ZT": "判断连通分量个数",
+            "ZT_len": 1,
+            "problem": "2129"
+        },
+        {
+            "title": "",
+            "ZX": "实验6-图",
+            "ZX_len":17,
+            "ZT": "邻接矩阵表示",
+            "ZT_len": 1,
+            "problem": "2141"
+        },
+        {
+            "title": "",
+            "ZT": "邻接表表示",
+            "ZT_len": 1,
+            "problem": "2142"
+        },
+        {
+            "title": "",
+            "ZT": "深度优先搜索",
+            "ZT_len": 2,
+            "problem": "2107"
+        },
+        {
+            "title": "",
+            "problem": "3361"
+        },
+        {
+            "title": "",
+            "ZT": "广度优先搜索",
+            "ZT_len": 2,
+            "problem": "1028"
+        },
+        {
+            "title": "",
+            "problem": "2139"
+        },
+        {
+            "title": "",
+            "ZT": "优先搜索",
+            "ZT_len": 1,
+            "problem": "2138"
+        },
+        {
+            "title": "",
+            "ZT": "最小生成树",
+            "ZT_len": 2,
+            "problem": "3362"
+        },
+        {
+            "title": "",
+            "problem": "2144"
+        },
+        {
+            "title": "",
+            "ZT": "最短路径",
+            "ZT_len": 2,
+            "problem": "3363"
+        },
+        {
+            "title": "",
+            "problem": "2413"
+        },
+        {
+            "title": "",
+            "ZT": "欧拉回路",
+            "ZT_len": 1,
+            "problem": "3364"
+        },
+        {
+            "title": "",
+            "ZT": "无向图的连通分量个数",
+            "ZT_len": 1,
+            "problem": "1488"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "有向图的强连通分量",
+            "ZT_len": 1,
+            "problem": "2506"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "拓扑排序",
+            "ZT_len": 1,
+            "problem": "2140"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "关键路径",
+            "ZT_len": 1,
+            "problem": "2498"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "最短路径",
+            "ZT_len": 1,
+            "problem": "2143"
+        },
+        {
+            "title": "",
+            "ZX": "实验7-查找表",
+            "ZX_len":10,
+            "ZT": "二叉排序树",
+            "ZT_len": 1,
+            "problem": "3373"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "平衡二叉树",
+            "ZT_len": 1,
+            "problem": "3374"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "树的种类统计",
+            "ZT_len": 1,
+            "problem": "3375"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "二分查找",
+            "ZT_len": 2,
+            "problem": "3376"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "",
+            "ZT_len": 0,
+            "problem": "2039"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "顺序查找",
+            "ZT_len": 2,
+            "problem": "3378"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "",
+            "ZT_len": 0,
+            "problem": "2040"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "哈希表",
+            "ZT_len": 3,
+            "problem": "2123"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "",
+            "ZT_len": 0,
+            "problem": "3377"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "",
+            "ZT_len": 0,
+            "problem": "3379"
+        },
+        {
+            "title": "",
+            "ZX": "实验8-内排序",
+            "ZX_len": 9,
+            "ZT": "快速排序",
+            "ZT_len": 3,
+            "problem": "2109"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "",
+            "ZT_len": 0,
+            "problem": "3398"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "",
+            "ZT_len": 0,
+            "problem": "3404"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "冒泡排序",
+            "ZT_len": 1,
+            "problem": "3399"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "桶排序",
+            "ZT_len": 1,
+            "problem": "3400"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "堆排序",
+            "ZT_len": 1,
+            "problem": "3401"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "归并排序",
+            "ZT_len": 1,
+            "problem": "3402"
+        },
+        {
+            "title": "",
+            "ZX": "",
+            "ZX_len": 0,
+            "ZT": "希尔排序",
+            "ZT_len": 1,
+            "problem": "3403"
+        }
+    ]
+}
