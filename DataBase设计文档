@@ -1,13 +1,16 @@
 数据库采用SQLite与Mongo
 SQLite
     User
-        使用django自带的user表，添加org字段以记录用户所属组织
+        superuser用户名为MeiK，密码为123456
+        使用django自带的user表，添加org字段以记录用户所属组织(X)
+        外键会对性能有影响，因此使用User自带的first_name储存用户昵称，last_name储存用户所属组织(orgId)
     Org
         组织需注册到此处，有 名(name)、简称(shortName) 字段，和自带的id字段
     Step
         计划注册到此处，字段有 名(title)、人数(userCount)、题数(problemCount)、总完成题数(allAcCount)、所属组织id(orgId)、所属平台(source)信息
 
 Mongo
+StepByStepData
     POJ/HDU/SDUT
         POJ/HDU/SDUT的用户列表与爬取出来的数据存在此处，格式如下:
             POJ/HDU/SDUT

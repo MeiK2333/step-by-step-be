@@ -1,6 +1,6 @@
 组织(Org)API:
     验证登录:
-        URL: /API/CheckLogin
+        URL: /API/Login
         请求类型: POST
         请求参数:
             POST数据
@@ -20,7 +20,15 @@
                     "orgName": 组织名,
                     "shortName": 组织简称,
                 }
+            }
         验证成功后会使该用户登录
+
+    退出登录:
+        URL: /API/Logout
+        请求类型: GET
+        请求参数: NULL
+        返回参数: NULL
+        退出当前用户的登录状态
 
     新建组织管理员:
         URL: /API/Org/CreateOrgAdmin
@@ -47,9 +55,36 @@
                 }
             }
         调用此API需要SuperUser权限
-    
+
+    获得所有组织管理员:
+        URL: /API/Org/GetOrgAdmin
+        请求类型: POST
+        请求参数:
+            POST数据
+            {
+                "csrfmiddlewaretoken": csrfToken,
+                "orgId": 组织ID,(为0则获取所有管理员)
+            }
+        返回数据:
+            {
+                "status": ......,
+                "count": 个数,
+                "list": [
+                    {
+                        "orgId": 组织ID,
+                        "userId": 管理员ID,
+                        "userName": 管理员用户名,
+                        "nickName": 管理员昵称,
+                        "orgName": 组织名,
+                        "shortName": 组织简称,
+                    },
+                    ......
+                ]
+            }
+        调用此API需要SuperUser权限
+
     修改组织管理员:
-        URL: /API/Org/UpdataOrgAdmin
+        URL: /API/Org/UpdateOrgAdmin
         请求类型: POST
         请求参数
             POST数据
@@ -59,7 +94,7 @@
                 "userId": 管理员ID,
                 "userName": 管理员用户名,
                 "nickName": 管理员昵称,
-                "passWord": 管理员密码,
+                "passWord": 管理员密码, (用户名、昵称、密码留空则为不修改，orgId与userId不能为空)
             }
         返回参数:
             {
@@ -88,6 +123,11 @@
         返回参数:
             {
                 "status": 本次操作状态，值为false或true,
+                "data": {
+                    "userId": id,
+                    "userName": username,
+                    "nickName": nickname,
+                }
             }
         调用此API需要SuperUser权限
     
@@ -113,7 +153,7 @@
         调用此API需要SuperUser权限
     
     修改组织:
-        URL: /API/Org/UpdataOrg
+        URL: /API/Org/UpdateOrg
         请求类型: POST
         请求参数:
             POST数据
@@ -176,7 +216,7 @@
         调用此API需要SuperUser权限或对应Org的权限
     
     修改计划:
-        URL: /API/Step/UpdataStep
+        URL: /API/Step/UpdateStep
         请求类型: POST
         请求参数:
             POST数据

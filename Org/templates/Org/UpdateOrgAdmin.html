@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UpdateOrgAdmin</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    orgId: <input type="text" name="orgId"><br>
+    userId: <input type="text" name="userId"><br>
+    userName: <input type="text" name="userName"><br>
+    nickName: <input type="text" name="nickName"><br>
+    passWord: <input type="text" name="passWord"><br>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

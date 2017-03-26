@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DeleteOrgAdmin</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    orgId: <input type="text" name="orgId"><br>
+    userId: <input type="text" name="userId"><br>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>
