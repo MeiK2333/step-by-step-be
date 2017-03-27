@@ -2,12 +2,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-import pymongo
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.decorators import login_required
 from Org.models import Org
 from Step.models import Step
-import cgi
 
 #验证用户登录
 def Login(request):
@@ -195,4 +193,92 @@ def DeleteOrgAdmin(request):
             "nickName": user.first_name
         }
     }
+    return JsonResponse(returnData)
+
+#创建Org
+def CreateOrg(request):
+    if request.method != 'POST': #检查请求类型
+        return render(request, 'Org/CreateOrg.html')
+        return JsonResponse({"status": False, "msg": "请求类型必须为POST"})
+    if request.user.is_anonymous(): #检查登录
+        return JsonResponse({"status": False, "msg": "未登录"})
+    if not request.user.is_superuser: #检查权限
+        return JsonResponse({"status": False, "msg": "权限不足"})
+    name = request.POST.get('name', '')
+    shortName = request.POST.get('shortName', '')
+    if len(Org.objects.filter(shortName = shortName)) > 0:
+        return JsonResponse({"status": False, "msg": "此Org已存在"})
+    org = Org() #新建
+    org.name = name
+    org.shortName = shortName
+    org.save()
+    org = Org.objects.get(shortName = shortName)
+    returnData = {
+        "status": True,
+        "data": {
+            "id": org.id,
+            "name": org.name,
+            "shortName": org.shortName
+        }
+    }
+    return JsonResponse(returnData)
+
+#修改Org
+def UpdateOrg(request):
+    if request.method != 'POST': #检查请求类型
+        return render(request, 'Org/UpdateOrg.html')
+        return JsonResponse({"status": False, "msg": "请求类型必须为POST"})
+    if request.user.is_anonymous(): #检查登录
+        return JsonResponse({"status": False, "msg": "未登录"})
+    if not request.user.is_superuser: #检查权限
+        return JsonResponse({"status": False, "msg": "权限不足"})
+    id = request.POST.get('id', '')
+    name = request.POST.get('name', '')
+    shortName = request.POST.get('shortName', '')
+    if shortName: #验证shortName是否重复
+        org = Org.objects.filter(shortName = shortName)
+        if len(org) > 0:
+            return JsonResponse({"status": False, "msg": "shortName重复"})
+    org = Org.objects.filter(id = id) #验证指定id的Org存在
+    if len(org) == 0:
+        return JsonResponse({"status": False, "msg": "Org不存在"})
+    org = org[0]
+    if name:
+        org.name = name
+    if shortName:
+        org.shortName = shortName
+    org.save()
+    returnData = {
+        "status": True,
+        "data": {
+            "id": org.id,
+            "name": org.name,
+            "shortName": org.shortName
+        }
+    }
+    return JsonResponse(returnData)
+
+#删除Org
+def DeleteOrg(request):
+    if request.method != 'POST': #检查请求类型
+        return render(request, 'Org/DeleteOrg.html')
+        return JsonResponse({"status": False, "msg": "请求类型必须为POST"})
+    if request.user.is_anonymous(): #检查登录
+        return JsonResponse({"status": False, "msg": "未登录"})
+    if not request.user.is_superuser: #检查权限
+        return JsonResponse({"status": False, "msg": "权限不足"})
+    id = request.POST.get('id', '')
+    org = Org.objects.filter(id = id)
+    if len(org) == 0:
+        return JsonResponse({"status": False, "msg": "Org不存在"})
+    returnData = {
+        "status": True,
+        "data": {
+            "id": org[0].id,
+            "name": org[0].name,
+            "shortName": org[0].shortName,
+        }
+    }
+    org[0].delete()
+    User.objects.filter(last_name = id).delete()
     return JsonResponse(returnData)

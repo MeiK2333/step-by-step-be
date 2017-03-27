@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DeleteOrg</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    id: <input type="text" name="id"><br>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

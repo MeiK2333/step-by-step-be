@@ -161,7 +161,7 @@
                 "csrfmiddlewaretoken": csrfToken,
                 "id": 组织ID,
                 "name": 组织名,
-                "shortName": 组织简称,
+                "shortName": 组织简称,(id为必填)
             }
         返回参数:
             {
@@ -186,6 +186,11 @@
         返回参数:
             {
                 "status": 本次操作状态，值为false或true
+                "data": {
+                    "id": 组织ID,
+                    "name": 组织名,
+                    "shortName": 组织简称,
+                }
             }
         调用此API需要SuperUser权限
 
@@ -208,6 +213,7 @@
             {
                 "status": 本次操作状态，值为false或true,
                 "data": {
+                    "orgId": 组织ID,
                     "id": 计划ID,
                     "title": 计划名,
                     "source": 计划平台,
@@ -222,6 +228,7 @@
             POST数据
             {
                 "csrfmiddlewaretoken": csrfToken,
+                "orgId": orgId,
                 "id": 计划ID,
                 "title": 计划名,
                 "source": 计划平台,
@@ -245,11 +252,18 @@
             POST数据
             {
                 "csrfmiddlewaretoken": csrfToken,
+                "orgId": 组织ID,
                 "id": 计划ID,
             }
         返回参数:
             {
                 "status": 本次操作状态，值为false或true
+                "data": {
+                    "orgId": 组织ID,
+                    "id": 计划ID,
+                    "title": 计划名,
+                    "source": 计划平台,
+                }
             }
         调用此API需要SuperUser权限或对应Org的权限
     

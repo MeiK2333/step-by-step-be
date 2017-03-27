@@ -32,42 +32,41 @@ StepByStepData
             }
     stepList
         将训练计划的具体内容保存在这里
-            sbsList
+        {
             {
-                {
-                    //数据来源: 添加/修改计划
-                    //数据去向: 生成计划页面
-                    "id": 同SQLite中的id，作为更改和删除的唯一凭证，需要保证唯一,
-                    "title": ......,
-                    "source": ......,
-                    "problemCount": ......,
-                    "userList": [
-                        {
-                            "userName": CYCYK,
-                            "class": 软件1501,
-                            "name": CYK
-                        },
-                        ......
-                    ],
-                    "problemList": [
-                        {
-                            "problem": "1000",
-                            "title": "A+B Problem",
-                            "ZX": "实验一",
-                            "ZX_len": 2,
-                            "ZT": "基础",
-                            "ZT_len": 1
-                        },
-                        {
-                            "problem": "1110",
-                            "title": "C语言实验-Hello World！(printf练习)",
-                            "ZT": "进阶",
-                            "ZT_len": 1
-                        }
-                    ]，
-                }，
+                //数据来源: 添加/修改计划
+                //数据去向: 生成计划页面
+                "id": 同SQLite中的id，作为更改和删除的唯一凭证，需要保证唯一,
+                "title": ......,
+                "source": ......,
+                "problemCount": ......,
+                "userList": [
+                    {
+                        "userName": CYCYK,
+                        "class": 软件1501,
+                        "name": CYK
+                    },
                     ......
-            }
+                ],
+                "problemList": [
+                    {
+                        "problem": "1000",
+                        "title": "A+B Problem",
+                        "ZX": "实验一",
+                        "ZX_len": 2,
+                        "ZT": "基础",
+                        "ZT_len": 1
+                    },
+                    {
+                        "problem": "1110",
+                        "title": "C语言实验-Hello World！(printf练习)",
+                        "ZT": "进阶",
+                        "ZT_len": 1
+                    }
+                ]，
+            }，
+            ......
+        }
     stepData
         为每个计划保存生成的JSON数据
         {

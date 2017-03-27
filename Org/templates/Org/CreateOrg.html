@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CreateOrg</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    name: <input type="text" name="name"><br>
+    shortName: <input type="text" name="shortName"><br>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>
