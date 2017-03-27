@@ -8,6 +8,7 @@ from Step import views as Step_views
 urlpatterns = [
     url(r'^$', Step_views.index, name='index'),
     url(r'^API/GetOrgList', API_views.GetOrgList, name='GetOrgList'), #获得Org列表
+    url(r'^API/GetStepList', API_views.GetStepList, name='GetStepList'), #获得指定Org的Step列表
     url(r'^API/Login', Org_views.Login, name='Login'), #登录
     url(r'^API/Logout', Org_views.Logout, name='Logout'), #注销
 
@@ -22,5 +23,6 @@ urlpatterns = [
     url(r'^API/Step/CreateStep', Step_views.CreateStep, name='CreateStep'), #新建计划
     url(r'^API/Step/UpdateStep', Step_views.UpdateStep, name='UpdateStep'), #修改计划
     url(r'^API/Step/DeleteStep', Step_views.DeleteStep, name='DeleteStep'), #删除计划
+    url(r'^API/Step/AddStepUser', Step_views.AddStepUser, name='AddStepUser'), #为计划添加用户
     url(r'^admin/', include(admin.site.urls)),
 ]

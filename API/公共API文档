@@ -54,6 +54,9 @@
             {
                 "status": 状态，false或true,
                 "count": 计划个数,
+                "orgId": orgId,
+                "orgName": orgName,
+                "shortName": orgShortName,
                 "list": [
                     {
                         "id": 计划ID,

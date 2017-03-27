@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.decorators import login_required
 from Org.models import Org
-from Step.models import Step, Step_save, Step_Update, Step_Delete
+from Step.models import Step, Step_save, Step_Update, Step_Delete, StepUser_Update
 
 def index(request):
     return render(request, 'Step/index.html')
@@ -23,6 +23,8 @@ def CreateStep(request):
             return JsonResponse({"status": False, "msg": "权限不足"})
     title = request.POST.get('title', '')
     source = request.POST.get('source', '')
+    if source != 'SDUT' and source != 'POj' and source != 'HDU':
+        return JsonResponse({"status": False, "msg": "source错误"})
     if not (orgId and title and source): #检验信息填写
         return JsonResponse({"status": False, "msg": "信息不足"})
     org = Org.objects.filter(id = int(orgId))
@@ -52,7 +54,9 @@ def CreateStep(request):
         "orgId": s.orgId,
         "id": s.id,
         "title": s.title,
-        "source": s.source
+        "source": s.source,
+        "userList": [],
+        "problemList": []
     }
     Step_save(step_M) #在mongo数据库中储存
     return JsonResponse(returnData)
@@ -131,3 +135,26 @@ def DeleteStep(request):
     Step_Delete(step.id)
     step.delete()
     return JsonResponse(returnData)
+
+#为计划添加用户
+def AddStepUser(request):
+    if request.method != 'POST': #检查请求类型
+        return render(request, 'Step/AddStepUser.html')
+        return JsonResponse({"status": False, "msg": "请求类型必须为POST"})
+    if request.user.is_anonymous(): #检查登录
+        return JsonResponse({"status": False, "msg": "未登录"})
+    orgId = request.POST.get('orgId', '')
+    if not request.user.is_superuser: #检查权限
+        if request.user.last_name != orgId:
+            return JsonResponse({"status": False, "msg": "权限不足"})
+    id = request.POST.get('id', '')
+    userName = request.POST.get('userName', '')
+    nickName = request.POST.get('nickName', '')
+    _class = request.POST.get('class', '')
+    if not (userName or nickName or _class):
+        return JsonResponse({"status": False, "msg": "信息不足"})
+    step = Step.objects.filter(orgId = int(orgId))
+    if len(step) == 0:
+        return JsonResponse({"status": False, "msg": "Org不存在"})
+    step = step[0]
+    #此处还没写完，应该为调用models中的update，然后返回数据

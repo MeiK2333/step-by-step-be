@@ -325,6 +325,7 @@
             POST数据
             {
                 "csrfmiddlewaretoken": csrfToken,
+                "orgId": orgId,
                 "id": 计划ID,
                 "userName": 用户名(对SDUT为uid),
                 "nickName": 在此计划中的名字,
