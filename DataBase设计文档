@@ -45,7 +45,8 @@ StepByStepData
                     {
                         "userName": CYCYK,
                         "class": 软件1501,
-                        "name": CYK
+                        "name": CYK,
+                        "userId": 1
                     },
                     ......
                 ],

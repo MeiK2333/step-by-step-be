@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^API/GetStepList', API_views.GetStepList, name='GetStepList'), #获得指定Org的Step列表
     url(r'^API/Login', Org_views.Login, name='Login'), #登录
     url(r'^API/Logout', Org_views.Logout, name='Logout'), #注销
+    url(r'^API/GetUserStepList', API_views.GetUserStepList, name='GetUserStepList'), #获取某人参加的所有计划
+    url(r'^API/GetStepUser', API_views.GetStepUser, name='GetStepUser'), #获取某计划的参与用户
 
     url(r'^API/Org/CreateOrgAdmin', Org_views.CreateOrgAdmin, name='CreateOrgAdmin'), #创建Org管理员
     url(r'^API/Org/GetOrgAdmin', Org_views.GetOrgAdmin, name='GetOrgAdmin'), #获得管理员列表
@@ -24,5 +26,6 @@ urlpatterns = [
     url(r'^API/Step/UpdateStep', Step_views.UpdateStep, name='UpdateStep'), #修改计划
     url(r'^API/Step/DeleteStep', Step_views.DeleteStep, name='DeleteStep'), #删除计划
     url(r'^API/Step/AddStepUser', Step_views.AddStepUser, name='AddStepUser'), #为计划添加用户
+    url(r'^API/Step/DelStepUser', Step_views.DelStepUser, name='DelStepUser'), #在计划中删除用户
     url(r'^admin/', include(admin.site.urls)),
 ]

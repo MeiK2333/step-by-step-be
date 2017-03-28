@@ -1,5 +1,5 @@
 function setTable() {
-    data = $.ajax({url: "/static/step1.json", async: false}).responseJSON;
+    data = $.ajax({url: "step1.json", async: false}).responseJSON;
     $("#step-title").text(data['title']);
     for (var i = 0; i < data['problemList'].length; i++) {
         var proData = "<tr>";
@@ -34,7 +34,7 @@ function setStatusTimeout(id, time) {
 
 function setStatus() {
     thisTime = new Date();
-    stepStatus = $.ajax({url: "/static/step1status.json", async: false}).responseJSON;
+    stepStatus = $.ajax({url: "step1status.json", async: false}).responseJSON;
     for (var i = 0; i < data['userList'].length; i++) {
         for (var j = 0; j < data['problemList'].length; j++) {
             var Time = stepStatus['status'][data['userList'][i]['userName']][data['problemList'][j]['problem']];

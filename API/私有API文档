@@ -275,6 +275,7 @@
             {
                 文件流,
                 "csrfmiddlewaretoken": csrfToken,
+                "orgId": orgId,
                 "id": 计划ID,
             }
         返回参数:
@@ -301,6 +302,7 @@
             {
                 文件流,
                 "csrfmiddlewaretoken": csrfToken,
+                "orgId": orgId,
                 "id": 计划ID,
             }
         返回参数:
@@ -336,13 +338,13 @@
                 "status": 本次操作状态，值为false或true,
                 "data": {
                     "orgId": 组织ID,
-                    "ordName": 组织名,
                     "id": 计划ID,
                     "title": 计划名,
                     "source": 计划平台,
                     "userName": 用户名(对SDUT为uid),
                     "nickName": 在此计划中的名字,
-                    "class": 所在班级
+                    "class": 所在班级,
+                    "userId": 该用户在此计划中的id(用于修改删除)
                 }
             }
         调用此API需要SuperUser权限或对应Org的权限，需确保用户名已被验证通过
@@ -355,6 +357,8 @@
             {
                 "csrfmiddlewaretoken": csrfToken,
                 "id": 计划ID,
+                "orgId": orgId,
+                "userId": userId,
                 "userName": 用户名(对SDUT为uid),
             }
         返回参数:

@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.decorators import login_required
 from Org.models import Org
-from Step.models import Step, Step_save, Step_Update, Step_Delete, StepUser_Update
+from Step.models import Step, Step_save, Step_Update, Step_Delete, StepUser_Update, StepList_Update, StepList_Delete, StepUser_Delete
 
 def index(request):
     return render(request, 'Step/index.html')
@@ -153,8 +153,57 @@ def AddStepUser(request):
     _class = request.POST.get('class', '')
     if not (userName or nickName or _class):
         return JsonResponse({"status": False, "msg": "信息不足"})
-    step = Step.objects.filter(orgId = int(orgId))
+    step = Step.objects.filter(id = int(id))
     if len(step) == 0:
-        return JsonResponse({"status": False, "msg": "Org不存在"})
+        return JsonResponse({"status": False, "msg": "StepId不存在"})
     step = step[0]
-    #此处还没写完，应该为调用models中的update，然后返回数据
+    if step.orgId != int(orgId):
+        return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
+    userId = step.userCount + 1
+    StepList_Update(int(id), userName, nickName, _class, userId) #将用户信息添加到此计划中
+    StepUser_Update(step.source, int(id), userName) #更新用户池列表
+    step.userCount = userId #更新计划人数
+    step.save()
+    returnData = {
+        "status": True,
+        "data": {
+            "userId": userId,
+            "orgId": step.orgId,
+            "id": step.id,
+            "title": step.title,
+            "source": step.source,
+            "userName": userName,
+            "nickName": nickName,
+            "class": _class
+        }
+    }
+    return JsonResponse(returnData)
+
+#在计划中删除用户
+def DelStepUser(request):
+    if request.method != 'POST': #检查请求类型
+        return render(request, 'Step/DelStepUser.html')
+        return JsonResponse({"status": False, "msg": "请求类型必须为POST"})
+    if request.user.is_anonymous(): #检查登录
+        return JsonResponse({"status": False, "msg": "未登录"})
+    orgId = request.POST.get('orgId', '')
+    if not request.user.is_superuser: #检查权限
+        if request.user.last_name != orgId:
+            return JsonResponse({"status": False, "msg": "权限不足"})
+    #写到这里我突然发现，这里的每个函数都要验证权限，那我为啥不干脆写个中间件呢......
+    id = request.POST.get('id', '')
+    userName = request.POST.get('userName', '')
+    userId = request.POST.get('userId', '')
+    if not (id or userName or userId):
+        return JsonResponse({"status": False, "msg": "信息不足"})
+    step = Step.objects.filter(id = int(id))
+    if len(step) == 0:
+        return JsonResponse({"status": False, "msg": "StepId不存在"})
+    step = step[0]
+    if step.orgId != int(orgId):
+        return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
+    if StepList_Delete(int(id), userName, int(userId)): #从stepList中删除
+        StepUser_Delete(step.source, int(id), userName) #从对应source中删除
+        return JsonResponse({"status": True})
+    else:
+        return JsonResponse({"status": False, "msg": "userId与其他信息不匹配"})

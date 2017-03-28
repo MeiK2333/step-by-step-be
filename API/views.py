@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from Org.models import Org
 from Step.models import Step
+from API.models import *
 
 #查询所有Org
 def GetOrgList(request):
@@ -46,3 +47,20 @@ def GetStepList(request):
         "list": stepList
     }
     return JsonResponse(returnData)
+
+#获取某人参加的所有计划
+def GetUserStepList(request):
+    source = request.GET.get('source', '')
+    userName = request.GET.get('source', '')
+    if source and userName:
+        stepList = getUserStepList_M(source, userName)
+        return JsonResponse({"status": True, "stepList": stepList})
+    return JsonResponse({"status": False, "msg": "信息不足"})
+
+#获取某计划的参与用户
+def GetStepUser(request):
+    stepId = request.GET.get('stepId', '')
+    if stepId:
+        userList = getStepUser(int(stepId))
+        return JsonResponse({"status": True, "userList": userList})
+    return JsonResponse({"status": False, "msg": "信息不足"})

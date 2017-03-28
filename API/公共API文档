@@ -99,11 +99,8 @@
         返回参数:
             {
                 "status": 状态，false或true,
-                "list": [
-                    {
-                        "id": 计划ID,
-                        "title": 计划名,
-                    },
+                "stepList": [
+                    "id": 计划ID,
                     ......
                 ],
             }
@@ -127,6 +124,38 @@
     
     获取某计划的参与用户:
         URL: /API/GetStepUser
+        请求类型: GET
+        请求参数: ?stepId={计划ID}
+        返回参数:
+            {
+                "status": status,
+                "userList": [
+                    {
+                        "userName": CYCYK,
+                        "class": 软件1501,
+                        "name": CYK,
+                        "userId": 1
+                    },
+                    ......
+                ]
+            }
     
     获取某计划的题目:
         URL: /API/GetStepProblem
+        请求类型: GET
+        请求参数: ?stepId={计划ID}
+        返回参数:
+            {
+                "status": status,
+                "problemList": [
+                    {
+                        "problem": "1000",
+                        "title": "A+B Problem",
+                        "ZX": "实验一",
+                        "ZX_len": 2,
+                        "ZT": "基础",
+                        "ZT_len": 1
+                    },
+                    ......
+                ]
+            }
