@@ -17,3 +17,11 @@ def getStepUser(stepId):
     if step:
         return step['userList']
     return []
+
+def getStepProblem(stepId):
+    client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
+    db = client.StepByStepData
+    step = db.stepList.find_one({"id": stepId})
+    if step:
+        return step['problemList']
+    return []

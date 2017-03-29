@@ -53,7 +53,6 @@ StepByStepData
                 "problemList": [
                     {
                         "problem": "1000",
-                        "title": "A+B Problem",
                         "ZX": "实验一",
                         "ZX_len": 2,
                         "ZT": "基础",
@@ -61,7 +60,6 @@ StepByStepData
                     },
                     {
                         "problem": "1110",
-                        "title": "C语言实验-Hello World！(printf练习)",
                         "ZT": "进阶",
                         "ZT_len": 1
                     }

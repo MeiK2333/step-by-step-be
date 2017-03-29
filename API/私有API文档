@@ -288,7 +288,7 @@
                     "title": 计划名,
                     "source": 计划平台,
                 }
-                "list": {
+                "problemList": {
                     ......(解析后的Excel内容),
                 }
             }
@@ -310,14 +310,18 @@
                 "status": 本次操作状态，值为false或true,
                 "data": {
                     "orgId": 组织ID,
-                    "ordName": 组织名,
                     "id": 计划ID,
                     "title": 计划名,
                     "source": 计划平台,
                 }
-                "list": {
+                "userList": [
+                    {
+                        "userName": userName,
+                        "name": name,
+                        "class": class
+                    },
                     ......(解析后的Excel内容),
-                }
+                ]
             }
     
     为计划添加用户:

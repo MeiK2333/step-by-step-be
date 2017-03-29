@@ -64,3 +64,11 @@ def GetStepUser(request):
         userList = getStepUser(int(stepId))
         return JsonResponse({"status": True, "userList": userList})
     return JsonResponse({"status": False, "msg": "信息不足"})
+
+#获取某计划的题目
+def GetStepProblem(request):
+    stepId = request.GET.get('stepId', '')
+    if stepId:
+        problemList = getStepProblem(int(stepId))
+        return JsonResponse({"status": True, "problemList": problemList})
+    return JsonResponse({"status": False, "msg": "信息不足"})

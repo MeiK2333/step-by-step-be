@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.decorators import login_required
 from Org.models import Org
-from Step.models import Step, Step_save, Step_Update, Step_Delete, StepUser_Update, StepList_Update, StepList_Delete, StepUser_Delete
+from Step.models import *
 
 def index(request):
     return render(request, 'Step/index.html')
@@ -207,3 +207,67 @@ def DelStepUser(request):
         return JsonResponse({"status": True})
     else:
         return JsonResponse({"status": False, "msg": "userId与其他信息不匹配"})
+
+#上传excel格式的用户信息
+def UpUserExcel(request):
+    if request.method != 'POST':
+        return render(request, 'Step/UpUserExcel.html')
+    orgId = request.POST.get('orgId', '')
+    id = request.POST.get('id', '')
+    excelFile = request.FILES.get('file')
+    if not (id and orgId and excelFile): #判断提交不为空
+        return JsonResponse({"status": False, "msg": "信息不足"})
+    if not excelFile.name.split('.')[-1] == 'xlsx': #判断后缀
+        return JsonResponse({"status": False, "msg": "请上传xlsx格式的文件"})
+    step = Step.objects.filter(id = int(id))
+    if len(step) == 0: #判断计划是否存在
+        return JsonResponse({"status": False, "msg": "计划id不存在"})
+    step = step[0]
+    if step.orgId != int(orgId):
+        return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
+    excelData = readUserExcel(excelFile)
+    returnData = {
+        "status": True,
+        "data": {
+            "id": step.id,
+            "orgId": step.orgId,
+            "title": step.title,
+            "source": step.source
+        },
+        "userList": excelData
+    }
+    return JsonResponse(returnData)
+
+#上传计划
+def UpStepExcel(request):
+    if request.method != 'POST': #检查请求类型
+        return render(request, 'Step/UpStepExcel.html')
+        return JsonResponse({"status": False, "msg": "请求类型必须为POST"})
+    if request.user.is_anonymous(): #检查登录
+        return JsonResponse({"status": False, "msg": "未登录"})
+    orgId = request.POST.get('orgId', '')
+    if not request.user.is_superuser: #检查权限
+        if request.user.last_name != orgId:
+            return JsonResponse({"status": False, "msg": "权限不足"})
+    id = request.POST.get('id', '')
+    excelFile = request.FILES.get('file')
+    if not (id and orgId and excelFile):
+        return JsonResponse({"status": False, "msg": "信息不足"})
+    step = Step.objects.filter(id = int(id))
+    if len(step) == 0: #判断计划是否存在
+        return JsonResponse({"status": False, "msg": "计划id不存在"})
+    step = step[0]
+    if step.orgId != int(orgId):
+        return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
+    excelData = saveListExcel(excelFile, int(id))
+    returnData = {
+        "status": True,
+        "data": {
+            "id": step.id,
+            "orgId": step.orgId,
+            "title": step.title,
+            "source": step.source
+        },
+        "problemList": excelData
+    }
+    return JsonResponse(returnData)
