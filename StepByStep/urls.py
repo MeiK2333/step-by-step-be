@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^API/GetUserStepList', API_views.GetUserStepList, name='GetUserStepList'), #获取某人参加的所有计划
     url(r'^API/GetStepUser', API_views.GetStepUser, name='GetStepUser'), #获取某计划的参与用户
     url(r'^API/GetStepProblem', API_views.GetStepProblem, name='GetStepProblem'), #获得某计划的题目
+    url(r'^API/GetStep', API_views.GetStep, name='GetStep'), #获取某计划的内容
+    url(r'^API/GetUserStep', API_views.GetUserStep, name='GetUserStep'), #获取某人在某计划中的做题情况
 
     url(r'^API/Org/CreateOrgAdmin', Org_views.CreateOrgAdmin, name='CreateOrgAdmin'), #创建Org管理员
     url(r'^API/Org/GetOrgAdmin', Org_views.GetOrgAdmin, name='GetOrgAdmin'), #获得管理员列表

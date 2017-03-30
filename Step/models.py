@@ -144,6 +144,8 @@ def saveListExcel(excelFile, id):
     
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
     db = client.StepByStepData
-    db.stepList.update({"id": id}, {"problemList": data}) #因为此函数经验证才能使用，因此这里直接使用id
+    lastData = db.stepList.find_one({"id": id}) #因为此函数经验证才能使用，因此这里直接使用id
+    lastData['problemList'] = data
+    db.stepList.update({"id": id}, lastData)
 
     return data

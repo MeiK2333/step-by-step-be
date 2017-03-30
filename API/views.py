@@ -51,7 +51,7 @@ def GetStepList(request):
 #获取某人参加的所有计划
 def GetUserStepList(request):
     source = request.GET.get('source', '')
-    userName = request.GET.get('source', '')
+    userName = request.GET.get('userName', '')
     if source and userName:
         stepList = getUserStepList_M(source, userName)
         return JsonResponse({"status": True, "stepList": stepList})
@@ -71,4 +71,30 @@ def GetStepProblem(request):
     if stepId:
         problemList = getStepProblem(int(stepId))
         return JsonResponse({"status": True, "problemList": problemList})
+    return JsonResponse({"status": False, "msg": "信息不足"})
+
+#获取某计划的内容
+def GetStep(request):
+    stepId = request.GET.get('stepId', '')
+    if stepId:
+        data = getStep(int(stepId))
+        data['status'] = True
+        return JsonResponse(data)
+    return JsonResponse({"status": False, "msg": "信息不足"})
+
+#获取某人在某计划中的做题情况
+def GetUserStep(request):
+    stepId = request.GET.get('stepId', '')
+    userName = request.GET.get('userName', '')
+    if stepId and userName:
+        data = getStep(int(stepId))
+        if not data:
+            return JsonResponse({"status": False, "msg": "无数据"})
+        returnData = {
+            "status": True,
+            "userName": userName,
+            "problemList": data['problemList'],
+            "data": data['data'][userName]
+        }
+        return JsonResponse(returnData)
     return JsonResponse({"status": False, "msg": "信息不足"})

@@ -1,5 +1,5 @@
 检查账号API:
-    检查账号是否存在:
+    *检查账号是否存在:
         URL: /API/CheckUser
         请求类型: GET
         请求参数: ?source={平台}&userName={用户名}
@@ -10,7 +10,7 @@
                 "uid": 用户UID(仅限SDUT),
             }
     
-    检查账号与密码是否匹配:
+    *检查账号与密码是否匹配:
         URL: /API/CheckLogin
         请求类型: POST
         请求参数:
@@ -83,16 +83,15 @@
                     ......
                 ],
                 "data": [
-                    {
-                        "userName": 用户名,
-                        "1000": "2015-09-21 22:22:22",
-                        ......(做题情况)
-                    },
+                        userName: {
+		                "1000": "2015-09-21 22:22:22",
+		                ......(做题情况)
+                        },
                     ......
                 ],
             }
     
-    获取某人参加的所有计划:
+    ?获取某人参加的所有计划:
         URL: /API/GetUserStepList
         请求类型: GET
         请求参数: ?source={此账号平台}&userName={用户名(对SDUT为uid)}
@@ -105,24 +104,24 @@
                 ],
             }
     
-    获取某人在某计划中的做题情况:
+    *获取某人在某计划中的做题情况:
         URL: /API/GetUserStep
         请求类型: GET
         请求参数: ?stepId={计划ID}&userName={用户名(对SDUT为uid)}
         返回参数:
             {
                 "status": 状态，false或true,
+                "userName": userName,
                 "problemList": [
                     ......
                 ],
                 "data": {
-                    "userName": 用户名,
                     "1000": "2015-09-21 22:22:22",
                     ......(做题情况)
                 },
             }
     
-    获取某计划的参与用户:
+    *获取某计划的参与用户:
         URL: /API/GetStepUser
         请求类型: GET
         请求参数: ?stepId={计划ID}
