@@ -37,6 +37,7 @@ def GetStepList(request):
         s['userCount'] = i.userCount
         s['problemCount'] = i.problemCount
         s['allAcCount'] = i.allAcCount
+        s['source'] = i.source
         stepList.append(s)
     returnData = {
         "status": True,
@@ -79,6 +80,7 @@ def GetStep(request):
     if stepId:
         data = getStep(int(stepId))
         data['status'] = True
+        del data['_id']
         return JsonResponse(data)
     return JsonResponse({"status": False, "msg": "信息不足"})
 
@@ -96,5 +98,22 @@ def GetUserStep(request):
             "problemList": data['problemList'],
             "data": data['data'][userName]
         }
+        return JsonResponse(returnData)
+    return JsonResponse({"status": False, "msg": "信息不足"})
+
+#检查用户是否存在
+def CheckUser(request):
+    userName = request.GET.get('userName', '')
+    source = request.GET.get('source', '')
+    if source and userName:
+        user = checkUser(userName, source)
+        if not user:
+            return JsonResponse({"status": False, "msg": "验证失败"})
+        returnData = {
+            "status": True,
+            "userName": userName
+        }
+        if source == 'SDUT':
+            returnData['uid'] = user
         return JsonResponse(returnData)
     return JsonResponse({"status": False, "msg": "信息不足"})

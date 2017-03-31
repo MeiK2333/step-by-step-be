@@ -16,6 +16,7 @@ def Step_save(step):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
     db = client.StepByStepData
     db.stepList.insert(step)
+    db.stepData.insert(step)
 
 def Step_Update(id, step):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)

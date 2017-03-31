@@ -23,7 +23,7 @@ def CreateStep(request):
             return JsonResponse({"status": False, "msg": "权限不足"})
     title = request.POST.get('title', '')
     source = request.POST.get('source', '')
-    if source != 'SDUT' and source != 'POj' and source != 'HDU':
+    if source != 'SDUT' and source != 'POJ' and source != 'HDU':
         return JsonResponse({"status": False, "msg": "source错误"})
     if not (orgId and title and source): #检验信息填写
         return JsonResponse({"status": False, "msg": "信息不足"})
@@ -157,6 +157,8 @@ def AddStepUser(request):
     if len(step) == 0:
         return JsonResponse({"status": False, "msg": "StepId不存在"})
     step = step[0]
+    if step.source == 'SDUT' and not userName.isdigit(): #检查SDUT的用户名为uid
+        return JsonResponse({"status": False, "msg": "类型不符合"})
     if step.orgId != int(orgId):
         return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
     userId = step.userCount + 1
