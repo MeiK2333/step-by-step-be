@@ -40,6 +40,7 @@ INSTALLED_APPS = (
 
     'Org',
     'Step',
+    'WEB',
 )
 
 MIDDLEWARE_CLASSES = (
