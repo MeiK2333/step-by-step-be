@@ -43,7 +43,7 @@ def GetStepList(request):
             stepList.append(s)
         returnData = {
             "status": True,
-            "count": len(org),
+            "count": len(step),
             "orgId": org[0].id,
             "orgName": org[0].name,
             "shortName": org[0].shortName,
@@ -100,7 +100,8 @@ def GetStep(request):
     if stepId:
         data = getStep(int(stepId))
         data['status'] = True
-        del data['_id']
+        if '_id' in data.keys():
+            del data['_id']
         return JsonResponse(data)
     return JsonResponse({"status": False, "msg": "信息不足"})
 
@@ -110,7 +111,7 @@ def GetUserStep(request):
     userName = request.GET.get('userName', '')
     if stepId and userName:
         data = getStep(int(stepId))
-        if not data:
+        if not data or not userName in data['data'].keys():
             return JsonResponse({"status": False, "msg": "无数据"})
         returnData = {
             "status": True,

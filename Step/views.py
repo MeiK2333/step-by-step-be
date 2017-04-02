@@ -102,6 +102,9 @@ def UpdateStep(request):
         "title": step.title,
         "source": step.source
     }
+    if source:
+        step_M['problemList'] = []
+        step_M['userList'] = []
     Step_Update(step.id, step_M)
     return JsonResponse(returnData)
 
@@ -162,7 +165,8 @@ def AddStepUser(request):
     if step.orgId != int(orgId):
         return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
     userId = step.userCount + 1
-    StepList_Update(int(id), userName, nickName, _class, userId) #将用户信息添加到此计划中
+    if not StepList_Update(int(id), userName, nickName, _class, userId): #将用户信息添加到此计划中
+        return JsonResponse({"status": False, "msg": "用户已存在"})
     StepUser_Update(step.source, int(id), userName) #更新用户池列表
     step.userCount = userId #更新计划人数
     step.save()
@@ -202,10 +206,12 @@ def DelStepUser(request):
     if len(step) == 0:
         return JsonResponse({"status": False, "msg": "StepId不存在"})
     step = step[0]
+    step.userCount -= 1
     if step.orgId != int(orgId):
         return JsonResponse({"status": False, "msg": "OrgId与StepId不匹配"})
     if StepList_Delete(int(id), userName, int(userId)): #从stepList中删除
         StepUser_Delete(step.source, int(id), userName) #从对应source中删除
+        step.save() #更新人数
         return JsonResponse({"status": True})
     else:
         return JsonResponse({"status": False, "msg": "userId与其他信息不匹配"})
@@ -272,4 +278,6 @@ def UpStepExcel(request):
         },
         "problemList": excelData
     }
+    step.problemCount = len(excelData)
+    step.save()
     return JsonResponse(returnData)

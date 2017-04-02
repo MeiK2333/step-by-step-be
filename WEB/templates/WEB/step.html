@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<head>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/static/css/sbs.min.css?v3.0.4" rel="stylesheet">
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.dotdotdot.min.js"></script>
+    <script src="/static/js/step.js"></script>
+    <script src="/static/fixed_table_header.min.js?v3.0.4"></script>
+    <script src="/static/js/sbs_resize_table.min.js?v3.0.4"></script>
+    <script src="/static/js/expanda.min.js?v3.0.4"></script>
+    <meta charset="utf-8">
+    <title>StepByStep</title>
+</head>
+
+<body>
+    <input type="hidden" id="stepId" value="{{ stepId }}">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">关于</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <h3><span class="glyphicon glyphicon-send" aria-hidden="true"></span> StepByStep <sup>4.0β</sup></h3>
+                        <h6>version 4.0.0</h6>
+                        <h6>Copyright © 2016-2017 StepByStep</h6>
+                        <h6>Designed by <a href="https://HellobLue.net" target="_blank">bLue</a> &amp; <a href="http://blog.csdn.net/MeiK_SDUT"
+                                target="_blank">MeiK</a></h6>
+                        <p></p><br />
+                        <p class="text-center">
+                            Have problem? Please contact <a href="mailto:meik2333@gmail.com" target="_blank">meik2333@gmail.com</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">StepByStep</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="">统计</a></li>
+                            <li><a data-toggle="modal" data-target="#myModal" href="javascript:void(0)">关于</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            {% if perms.user %}
+                            <li><a href="">{{ user.username }}</a></li>
+                            <li><a href="">Logout</a></li>
+                            {% elif user.is_authenticated %}
+                            <li><a href="/admin">{{ user.username }}</a></li>
+                            <li><a href="">Logout</a></li>
+                            {% else %}
+                            <li><a href="">Login</a></li>
+                            <li><a href="">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="blank"></div>
+            <div id="div1" class="main-div" style="width: 360px; overflow: hidden;">
+                <table id="table1" class="table table-bordered" style="table-layout: fixed;">
+                    <col style="width:100px" />
+                    <col style="width:159px" />
+                    <col style="width:100px" />
+                    <thead class="vertical-middle">
+                        <tr class="step-title">
+                            <th colspan="3" id="step-title">-</th>
+                        </tr>
+                        <tr class="step-header">
+                            <th>专项</th>
+                            <th>专题</th>
+                            <th>题目</th>
+                        </tr>
+                    </thead>
+                    <tbody id="problem-list">
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="div2" class="main-div" style="width: 1px; overflow: auto; border-right: 1px solid #ddd;" onscroll="document.getElementById('div1').scrollTop = this.scrollTop;">
+                <table id="table2" class="table table-bordered table-hover" style="table-layout: fixed;">
+                    <thead>
+                        <tr class="head-user" id="user-list">
+
+                        </tr>
+                    </thead>
+                    <tbody class="vertical-middle" id="problem-status">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialization
+        $(function () {
+            // Add title & progress
+            $("#div1 tbody tr").each(function () {
+                $(this).children("td").each(function (idx, e) {
+                    if (idx < 2) $(e).attr("title", $(e).text());
+                });
+            });
+            $("#table2 th .progress").each(function () {
+                var value = $(this).children(".progress-bar").attr("aria-valuenow");
+                var title = value + '% Complete'
+                $(this).attr("title", title);
+                $(this).children(".progress-bar").append('<span class="sr-only">' + title + '</span>');
+                $(this).children(".progress-bar").css("width", value + '%');
+            });
+            // expanda
+            $("#div1 a").parent("td").expanda();
+            $("#table2 th").each(function () {
+                $(this).children("div:first").expanda();
+            });
+            // dot-ellipsis
+            var heightPerProb = 38;
+            var edge = 18;
+            $("#div1 td").each(function () {
+                $(this).addClass("dot-ellipsis");
+                var num = $(this).attr("rowspan");
+                if (typeof (num) == "undefined") num = 1;
+                $(this).dotdotdot({
+                    height: num * heightPerProb - edge
+                });
+            });
+            // tooltip
+            $("#div1 a").attr({ "data-toggle": "tooltip", "data-placement": "right" });
+            $("[data-toggle='tooltip']").click(function () {
+                $(this).blur();
+            });
+        });
+        // Enable tooltip
+        $(function () { $("[data-toggle='tooltip']").tooltip(); });
+    </script>
+</body>
+
+</html>

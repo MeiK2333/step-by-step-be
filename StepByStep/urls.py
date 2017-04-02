@@ -8,6 +8,8 @@ from WEB import views as WEB_views
 
 urlpatterns = [
     url(r'^$', WEB_views.index, name='index'),
+    url(r'^step/(\d+)$', WEB_views.step, name='step'),
+    url(r'^admin/$', WEB_views.admin, name='admin'),
 
     url(r'^API$', Step_views.index, name='API'),
     url(r'^API/GetOrgList', API_views.GetOrgList, name='GetOrgList'), #获得Org列表
@@ -36,5 +38,5 @@ urlpatterns = [
     url(r'^API/Step/DelStepUser', Step_views.DelStepUser, name='DelStepUser'), #在计划中删除用户
     url(r'^API/Step/UpUserExcel', Step_views.UpUserExcel, name='UpUserExcel'), #上传excel格式的计划
     url(r'^API/Step/UpStepExcel', Step_views.UpStepExcel, name='UpStepExcel'), #上传计划
-    url(r'^admin/', include(admin.site.urls)),
+    #url(r'^admin/', include(admin.site.urls)),
 ]

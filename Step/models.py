@@ -21,7 +21,7 @@ def Step_save(step):
 def Step_Update(id, step):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
     db = client.StepByStepData
-    db.stepList.update({"id": id}, step)
+    db.stepList.update({"id": id}, {'$set': step})
 
 def Step_Delete(id):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
@@ -32,6 +32,9 @@ def StepList_Update(id, userName, nickName, _class, userId):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
     db = client.StepByStepData
     step = db.stepList.find_one({"id": id}) #因为之前对sqlite中的数据进行了验证，因此这里默认有这条数据
+    for i in step['userList']:
+        if userName == i['userName']:
+            return False
     userData = {
         "userId": userId,
         "userName": userName,
@@ -40,6 +43,7 @@ def StepList_Update(id, userName, nickName, _class, userId):
     }
     step['userList'].append(userData) #将当前用户添加至列表中
     db.stepList.update({"id": id}, step)
+    return True
 
 def StepUser_Update(source, id, userName): #更新用户信息
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
@@ -63,10 +67,14 @@ def StepList_Delete(id, userName, userId):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)
     db = client.StepByStepData
     step = db.stepList.find_one({"id": id}) #默认能拿到数据
-    if step['userList'][userId-1]['userId'] == userId and step['userList'][userId-1]['userName'] == userName: #判断userName与userId对应
-        del step['userList'][userId-1]
-        db.stepList.update({"id": id}, step) #更新数据
-        return True
+    for i, user in enumerate(step['userList']):
+        if userName == user['userName']:
+            del step['userList'][i]
+            db.stepList.update({"id": id}, step)
+            return True
+    #if step['userList'][userId-1]['userName'] == userName: #判断userName与userId对应
+    #    del step['userList'][userId-1]
+    #    db.stepList.update({"id": id}, step) #更新数据
     return False
 
 def StepUser_Delete(source, id, userName):
