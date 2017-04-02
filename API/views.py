@@ -24,30 +24,50 @@ def GetOrgList(request):
 
 #获取指定Org的Step列表
 def GetStepList(request):
-    orgId = request.GET.get('orgId', '0')
-    org = Org.objects.filter(id = int(orgId))
-    if len(org) == 0:
-        return JsonResponse({"status": False, "msg": "Org不存在"})
-    step = Step.objects.filter(orgId = int(orgId))
-    stepList = []
-    for i in step:
-        s = {}
-        s['id'] = i.id
-        s['title'] = i.title
-        s['userCount'] = i.userCount
-        s['problemCount'] = i.problemCount
-        s['allAcCount'] = i.allAcCount
-        s['source'] = i.source
-        stepList.append(s)
-    returnData = {
-        "status": True,
-        "count": len(org),
-        "orgId": org[0].id,
-        "orgName": org[0].name,
-        "shortName": org[0].shortName,
-        "list": stepList
-    }
-    return JsonResponse(returnData)
+    orgId = request.GET.get('orgId', '')
+    try: #判断输入是否为数字
+        orgId = int(orgId)
+        org = Org.objects.filter(id = orgId)
+        if len(org) == 0:
+            return JsonResponse({"status": False, "msg": "Org不存在"})
+        step = Step.objects.filter(orgId = int(orgId))
+        stepList = []
+        for i in step:
+            s = {}
+            s['id'] = i.id
+            s['title'] = i.title
+            s['userCount'] = i.userCount
+            s['problemCount'] = i.problemCount
+            s['allAcCount'] = i.allAcCount
+            s['source'] = i.source
+            stepList.append(s)
+        returnData = {
+            "status": True,
+            "count": len(org),
+            "orgId": org[0].id,
+            "orgName": org[0].name,
+            "shortName": org[0].shortName,
+            "list": stepList
+        }
+        return JsonResponse(returnData)
+    except: #如果不是数字，则返回所有列表
+        step = Step.objects.all()
+        stepList = []
+        for i in step:
+            s = {}
+            s['id'] = i.id
+            s['title'] = i.title
+            s['userCount'] = i.userCount
+            s['problemCount'] = i.problemCount
+            s['allAcCount'] = i.allAcCount
+            s['source'] = i.source
+            stepList.append(s)
+        returnData = {
+            "status": True,
+            "count": len(step),
+            "list": stepList
+        }
+        return JsonResponse(returnData)
 
 #获取某人参加的所有计划
 def GetUserStepList(request):
