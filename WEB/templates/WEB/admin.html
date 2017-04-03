@@ -13,7 +13,6 @@
 </head>
 
 <body>
-    <input type="hidden" id="orgId" value="{{ orgId }}">
     <script>
         $.ajaxSetup({
             data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -46,6 +45,46 @@
         </div>
     </div>
 
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        ×
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        帮助
+                    </h4>
+                </div>
+                <div class="modal-body" id="myModalBody">
+                    <b>新建计划</b>
+                    <p>在页面右下的输入框中设置计划信息，点击新建即可。</p>
+                    <b>修改计划</b>
+                    <p>点击计划名称即可修改计划名称，不支持修改计划来源。</p>
+                    <b>删除计划</b>
+                    <p>点击计划对应行的删除即可。</p>
+                    <b>添加计划题目</b>
+                    <p>点击题数，在底部选择提交，将Excel格式的题目上传即可。<a href="/static/problem.xlsx">示例下载</a></p>
+                    <b>批量添加计划用户</b>
+                    <p>点击人数，在底部选择提交，将Excel格式的用户上传，页面会在一秒之后以0.1秒的间隔进行校验提交，添加失败的用户会显示在页面上。<a href="/static/user.xlsx">示例下载</a></p>
+                    <b>单个添加计划用户</b>
+                    <p>点击人数，在弹出框底部填写信息，提交即可。若添加失败，会返回失败信息。</p>
+                    <b>从计划中删除用户</b>
+                    <p>点击人数，点击要删除的用户对应行的删除即可。</p>
+                    <b>BUG及其他问题反馈</b>
+                    <p>请联系<a href="mailto:meik2333@gmail.com" target="_blank">meik2333@gmail.com</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="myModalSubmit">
+                        提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="everything">
         <div class="banner">
             <div class="container">
@@ -64,7 +103,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a data-toggle="modal" data-target="#myModal" href="javascript:void(0)">帮助</a></li>
+                        <li><a data-toggle="modal" data-target="#helpModal" href="javascript:void(0)">帮助</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if perms.user %}
@@ -93,6 +132,25 @@
                     <tbody class="vertical-middle" id="tbody">
                     </tbody>
                 </table>
+                <br>
+                <div class="span12 form-inline">
+                    <div class="pull-right">
+                        <input type="hidden" id="orgId" value="{{ orgId }}">
+                        <div class="input-group">
+                            <select class="form-control" id="createStepSource">
+                                <option value="SDUT">SDUT</option>
+                                <option value="POJ">POJ</option>
+                                <option value="HDU">HDU</option>
+                            </select>
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" placeholder="计划名称" id="createStepTitle">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" onclick="createStep()">新建</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
