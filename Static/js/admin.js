@@ -264,6 +264,10 @@ function allUserCheck(l, r, source, stepId) {
     }
     var status = $.ajax({ url: "/API/CheckUser?source=" + source + "&userName=" + userName, async: false }).responseJSON;
     if (status['status']) {
+        if (status['uid']) {
+            s[2].innerText = status['uid'];
+            userName = status['uid'];
+        }
         var dataJson = {
             "orgId": orgId,
             "id": stepId,
@@ -300,6 +304,11 @@ function createStep() {
            alert(result['msg']);
        }
     });
+}
+
+function logout() {
+    $.ajax({ url: "/API/Logout", async: false });
+    location.reload(true);
 }
 
 $(document).ready(function () {

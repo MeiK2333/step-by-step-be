@@ -9,8 +9,8 @@ def getUserStepList_M(source, userName):
     db = client.StepByStepData
     user = db[source].find_one({"userName": userName})
     if user: #如果有这个用户
-        return user['stepList']
-    return [] #否则返回空列表
+        return user['stepList'], user['allAc']
+    return [], 0 #否则返回空列表
 
 def getStepUser(stepId):
     client = pymongo.MongoClient(host = "127.0.0.1", port = 27017)

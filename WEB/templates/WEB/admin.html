@@ -8,6 +8,7 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/jquery.dotdotdot.min.js"></script>
     <script src="/static/js/admin.js"></script>
+    <link rel="shortcut icon" href="/static/favicon.ico" />
     <meta charset="utf-8">
     <title>StepByStep</title>
 </head>
@@ -66,7 +67,7 @@
                     <b>添加计划题目</b>
                     <p>点击题数，在底部选择提交，将Excel格式的题目上传即可。<a href="/static/problem.xlsx">示例下载</a></p>
                     <b>批量添加计划用户</b>
-                    <p>点击人数，在底部选择提交，将Excel格式的用户上传，页面会在一秒之后以0.1秒的间隔进行校验提交，添加失败的用户会显示在页面上。<a href="/static/user.xlsx">示例下载</a></p>
+                    <p>点击人数，在底部选择提交，将Excel格式的用户上传，页面会在一秒之后以0.1秒的间隔进行校验提交，添加失败的用户会显示在页面上。SDUT的用户名会自动转化为uid。<a href="/static/user.xlsx">示例下载</a></p>
                     <b>单个添加计划用户</b>
                     <p>点击人数，在弹出框底部填写信息，提交即可。若添加失败，会返回失败信息。</p>
                     <b>从计划中删除用户</b>
@@ -76,9 +77,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                    </button>
-                    <button type="button" class="btn btn-primary" id="myModalSubmit">
-                        提交
                     </button>
                 </div>
             </div>
@@ -106,16 +104,8 @@
                         <li><a data-toggle="modal" data-target="#helpModal" href="javascript:void(0)">帮助</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        {% if perms.user %}
                         <li><a href="">{{ user.username }}</a></li>
-                        <li><a href="">Logout</a></li>
-                        {% elif user.is_authenticated %}
-                        <li><a href="">{{ user.username }}</a></li>
-                        <li><a href="">Logout</a></li>
-                        {% else %}
-                        <li><a href="">Login</a></li>
-                        <li><a href="">Register</a></li>
-                        {% endif %}
+                        <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
                     </ul>
                 </div>
             </div>

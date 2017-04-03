@@ -1,0 +1,3 @@
+/*Powered by: http://blog.csdn.net/xiebaochun/article/details/38676457
+*/
+p#back-to-top{position:fixed;display:none;bottom:60px;right:60px}p#back-to-top a{text-align:center;text-decoration:none;color:#d1d1d1;display:block;width:64px;-moz-transition:color 1s;-webkit-transition:color 1s;-o-transition:color 1s}p#back-to-top a:hover{color:#979797}p#back-to-top a span{background:transparent no-repeat -25px -290px;border-radius:6px;display:block;height:64px;width:56px;margin-bottom:5px;-moz-transition:background 1s;-webkit-transition:background 1s;-o-transition:background 1s}#back-to-top a:hover span{background:transparent no-repeat -25px -290px}

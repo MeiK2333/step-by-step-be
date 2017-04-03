@@ -74,8 +74,8 @@ def GetUserStepList(request):
     source = request.GET.get('source', '')
     userName = request.GET.get('userName', '')
     if source and userName:
-        stepList = getUserStepList_M(source, userName)
-        return JsonResponse({"status": True, "stepList": stepList})
+        stepList, allAc = getUserStepList_M(source, userName)
+        return JsonResponse({"status": True, "stepList": stepList, "allAc": allAc})
     return JsonResponse({"status": False, "msg": "信息不足"})
 
 #获取某计划的参与用户
@@ -117,7 +117,8 @@ def GetUserStep(request):
             "status": True,
             "userName": userName,
             "problemList": data['problemList'],
-            "data": data['data'][userName]
+            "data": data['data'][userName],
+            "title": data['title']
         }
         return JsonResponse(returnData)
     return JsonResponse({"status": False, "msg": "信息不足"})

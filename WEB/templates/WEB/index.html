@@ -8,11 +8,17 @@
     <script src="/static/js/jquery-1.12.4.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/home.js"></script>
+    <link rel="shortcut icon" href="/static/favicon.ico" />
     <meta charset="utf-8">
     <title>StepByStep</title>
 </head>
 
 <body>
+    <script>
+        $.ajaxSetup({
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+    </script>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -34,6 +40,52 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">注册</h4>
+                </div>
+                <div class="modal-body">
+                    <p>本站不开放自由注册，申请帐号请联系本校老师或者联系<a href="mailto:meik2333@gmail.com" target="_blank">meik2333@gmail.com</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">登录</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <input type="text" id="userName" placeholder="Username" autofocus="autofocus" class="form-control input-lg">
+                                <br>
+                                <input type="password" id="passWord" placeholder="Password" class="form-control input-lg">
+                                <span id="status"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <button onclick="login()" class="btn btn-primary">Login</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -59,14 +111,11 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if perms.user %}
-                        <li><a href="">{{ user.username }}</a></li>
-                        <li><a href="">Logout</a></li>
-                        {% elif user.is_authenticated %}
                         <li><a href="/admin">{{ user.username }}</a></li>
-                        <li><a href="">Logout</a></li>
+                        <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
                         {% else %}
-                        <li><a href="">Login</a></li>
-                        <li><a href="">Register</a></li>
+                        <li><a data-toggle="modal" data-target="#loginModal" href="javascript:void(0)">Login</a></li>
+                        <li><a data-toggle="modal" data-target="#registerModal" href="javascript:void(0)">Register</a></li>
                         {% endif %}
                     </ul>
                 </div>

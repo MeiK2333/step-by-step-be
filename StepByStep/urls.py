@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^$', WEB_views.index, name='index'),
     url(r'^step/(\d+)$', WEB_views.step, name='step'),
     url(r'^admin/$', WEB_views.admin, name='admin'),
+    url(r'^user/', WEB_views.user, name='user'),
 
     url(r'^API$', Step_views.index, name='API'),
     url(r'^API/GetOrgList', API_views.GetOrgList, name='GetOrgList'), #获得Org列表
