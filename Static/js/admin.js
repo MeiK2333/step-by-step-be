@@ -4,6 +4,7 @@ function setStepList() {
     if (!stepList['status']) {
         alert(stepList['msg']);
     }
+    $("#orgName").text(stepList['shortName'] + ' - ' + stepList['orgName']);
     $("#thead").html('<th>编号</th><th>计划名称</th><th>来源</th><th>人数</th><th>题数</th><th>操作</th>');
     $("#tbody").html("");
     for (var i = 0; i < stepList['count']; i++) {
@@ -136,6 +137,9 @@ function checkStepUser(stepId, source) {
     }
     var status = $.ajax({ url: "/API/CheckUser?source=" + source + "&userName=" + userName, async: false }).responseJSON;
     if (status['status']) {
+        if (status['uid']) {
+            userName = status['uid'];
+        }
         addStepUser(stepId, userClass, nickName, userName);
     } else {
         alert(status['msg']);
@@ -249,7 +253,7 @@ function allUserModel(response) {
 //批量验证列表内的用户
 function allUserCheck(l, r, source, stepId) {
     if (l >= r) {
-        $("#myModal").modal('hide');
+        //$("#myModal").modal('hide');
         setStepList();
         return;
     }

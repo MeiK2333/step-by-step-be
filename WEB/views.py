@@ -16,7 +16,9 @@ def admin(request):
     if not request.user.is_superuser: #检查权限
         orgId = request.user.last_name
     else:
-        orgId = request.GET.get('orgId', '1')
+        orgId = request.GET.get('orgId', '-1')
+        if orgId == '-1':
+            return render(request, 'WEB/adminList.html')
     return render(request, 'WEB/admin.html', {"orgId": orgId})
 
 def user(request):

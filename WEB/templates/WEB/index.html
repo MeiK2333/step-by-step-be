@@ -110,7 +110,7 @@
                         <li><a data-toggle="modal" data-target="#myModal" href="javascript:void(0)">关于</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        {% if perms.user %}
+                        {% if request.user.is_authenticated %}
                         <li><a href="/admin">{{ user.username }}</a></li>
                         <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
                         {% else %}

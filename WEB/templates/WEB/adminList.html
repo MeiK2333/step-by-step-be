@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/static/css/sbs.min.css?v3.0.4" rel="stylesheet">
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="/static/favicon.ico" />
+    <meta charset="utf-8">
+    <title>StepByStep</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="container">
+            <div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr id="thead">
+                        </tr>
+                    </thead>
+                    <tbody class="vertical-middle" id="tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        orgList = $.ajax({ url: "/API/GetOrgList", async: false }).responseJSON;
+        $("#thead").html('<th>编号</th><th>简称</th><th>组织名</th>');
+        for (var i = 0; i < orgList['count']; i++) {
+            $("#tbody").append('<tr><td>' + i + '</td><td>' + orgList['list'][i]['shortName'] +
+                '</td><td style="text-align: left"><a target="_blank" href="/admin/?orgId=' + orgList['list'][i]['id'] +
+                '">' + orgList['list'][i]['name'] + '</a></td></tr>');
+        }
+    </script>
+</body>
+
+</html>
