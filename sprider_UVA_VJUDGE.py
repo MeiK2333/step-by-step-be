@@ -32,18 +32,18 @@ def uva_vjudge_spider_func(userData):
             break
         #更新bottom，初始化breakFlag
         if postData['start'] == 0:
-            breakFlag = 0
+            breakFlag = False
             userData['bottom'] = jsonData[0]['runId']
-        print start
         for i in jsonData:
+            p = str(i['probNum'])
+            t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i['time'] / 1000))
             #首先判断是否爬取到上次所在的地方
             if i['runId'] == int(bottom):
+                breakFlag = True
                 break
             #结果为AC
             if i['status'] == 'Accepted':
                 #若之前已有此题数据
-                t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i['time'] / 1000))
-                p = str(i['probNum'])
                 if p in data.keys():
                     #判断之前为AC还是Error
                     #是Error则更新状态
@@ -68,6 +68,9 @@ def uva_vjudge_spider_func(userData):
                         continue
                 else:
                     data[p] = t + '-Error'
+        if breakFlag:
+            break
+        print start
         draw += 1
         start += 20
 
