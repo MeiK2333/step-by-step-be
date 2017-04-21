@@ -15,6 +15,8 @@ function setTable(stepId) {
             Url = 'http://poj.org/problem?id=' + data['problemList'][i]['problem'];
         else if (data['source'] == 'HDU')
             Url = 'http://acm.hdu.edu.cn/showproblem.php?pid=' + data['problemList'][i]['problem'];
+        else
+            Url = '#';
         proData = proData + "<td><a href=\"" + Url + "\" target=\"_blank\" title=\"" + data['problemList'][i]['title'] + "\">" + data['source'] + " " + data['problemList'][i]['problem'] + "</a></td>";
         $("#problem-list").append(proData + "</tr>");
         $("#problem-status").append("<tr id=\"problem-" + i + "\"></tr>")

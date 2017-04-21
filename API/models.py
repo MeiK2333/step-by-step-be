@@ -2,6 +2,7 @@
 from django.db import models
 import pymongo
 import urllib
+import requests
 import json
 
 def getUserStepList_M(source, userName):
@@ -65,6 +66,16 @@ def checkUser(username, source):
                 return False
             else:
                 return username
+        except:
+            return False
+    elif source == 'UVA':
+        try:
+            url = 'https://cn.vjudge.net/user/' + username
+            data = requests.get(url)
+            if data.status_code == 200:
+                return username
+            else:
+                return False
         except:
             return False
     else:

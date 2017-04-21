@@ -23,7 +23,7 @@ def CreateStep(request):
             return JsonResponse({"status": False, "msg": "权限不足"})
     title = request.POST.get('title', '')
     source = request.POST.get('source', '')
-    if source != 'SDUT' and source != 'POJ' and source != 'HDU':
+    if source != 'SDUT' and source != 'POJ' and source != 'HDU' and source != 'UVA':
         return JsonResponse({"status": False, "msg": "source错误"})
     if not (orgId and title and source): #检验信息填写
         return JsonResponse({"status": False, "msg": "信息不足"})

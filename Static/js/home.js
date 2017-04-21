@@ -2,7 +2,7 @@ function setOrgList() {
     orgList = $.ajax({ url: "/API/GetOrgList", async: false }).responseJSON;
     $("#thead").html('<th>编号</th><th>简称</th><th>组织名</th>');
     for (var i = 0; i < orgList['count']; i++) {
-        $("#tbody").append('<tr><td>' + i + '</td><td>' + orgList['list'][i]['shortName'] +
+        $("#tbody").append('<tr><td>' + (i+1) + '</td><td>' + orgList['list'][i]['shortName'] +
             '</td><td style="text-align: left"><a href="javascript:void(0)" onclick="setStepList(\'' +
             orgList['list'][i]['id'] + '\')">' +
             orgList['list'][i]['name'] + '</a></td></tr>');
@@ -16,7 +16,7 @@ function setStepList(id) {
             <th style="width: 20%;">题数</th>');
     $("#tbody").html('');
     for (var i = 0; i < stepList['count']; i++) {
-        $("#tbody").append('<tr><td>' + i + '</td><td style="text-align: left;">\
+        $("#tbody").append('<tr><td>' + (i+1) + '</td><td style="text-align: left;">\
         <a target="_blank" href="/step/' + stepList['list'][i]['id'] + '">' + stepList['list'][i]['title'] + '</a></td>\
               <td>' + stepList['list'][i]['source'] + '</td>\
               <td>' + stepList['list'][i]['userCount'] + '</td>\
