@@ -1,6 +1,8 @@
 #coding=utf-8
 from bs4 import BeautifulSoup
 import urllib
+import os
+import sys
 import re
 import json
 import pymongo
@@ -61,3 +63,6 @@ if '__main__' == __name__:
     for i in userList:
         print i['userName']
         hdu_spider_func(i)
+    f = open(os.path.join(sys.path[0], 'log.txt'), 'a')
+    f.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' HDU\n')
+    f.close()
