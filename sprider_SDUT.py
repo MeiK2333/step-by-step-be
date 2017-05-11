@@ -1,5 +1,7 @@
 #coding=utf-8
 import re
+import os
+import sys
 import pymongo
 import json
 import urllib
@@ -25,3 +27,6 @@ if __name__ == '__main__':
     for i in userList:
         print i['userName']
         sdut_spider_func(i)
+    f = open(os.path.join(sys.path[0], 'log.txt'), 'a')
+    f.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' SDUT\n')
+    f.close()
