@@ -1,4 +1,6 @@
 #coding=utf-8
+import os
+import sys
 import requests
 import json
 import time
@@ -85,3 +87,6 @@ if '__main__' == __name__:
     for i in userList:
         print i['userName']
         uva_vjudge_spider_func(i)
+    f = open(os.path.join(sys.path[0], 'log.txt'), 'a')
+    f.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' UVA\n')
+    f.close()
