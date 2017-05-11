@@ -1,5 +1,7 @@
 #coding=utf-8
 from bs4 import BeautifulSoup
+import os
+import sys
 import urllib2
 import re
 import json
@@ -61,3 +63,6 @@ if '__main__' == __name__:
     for i in userList:
         print i['userName']
         poj_spider_func(i)
+    f = open(os.path.join(sys.path[0], 'log.txt'), 'a')
+    f.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' POJ\n')
+    f.close()
