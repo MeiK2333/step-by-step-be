@@ -1,5 +1,6 @@
 #coding=utf-8
 import sqlite3
+import os
 import sys
 import pymongo
 
@@ -49,3 +50,6 @@ if __name__ == '__main__':
     stepList = cursor.fetchall()
     for step in stepList:
         main(step[0], step[1], step[2], step[3])
+    f = open(os.path.join(sys.path[0], 'log.txt'), 'a')
+    f.write(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ' conversion\n')
+    f.close()
