@@ -4,10 +4,10 @@ function setTable(stepId) {
     for (var i = 0; i < data['problemList'].length; i++) {
         var proData = "<tr>";
         if (data['problemList'][i]['ZX']) {
-            proData = proData + "<td rowspan=\"" + data['problemList'][i]['ZX_len'] + "\">" + data['problemList'][i]['ZX'] + "</td>";
+            proData = proData + "<td rowspan=\"" + data['problemList'][i]['ZX_len'] + "\">" + data['problemList'][i]['ZX'] + '(' + data['problemList'][i]['ZX_len'] +')' + "</td>";
         }
         if (data['problemList'][i]['ZT']) {
-            proData = proData + "<td rowspan=\"" + data['problemList'][i]['ZT_len'] + "\">" + data['problemList'][i]['ZT'] + "</td>";
+            proData = proData + "<td rowspan=\"" + data['problemList'][i]['ZT_len'] + "\">" + data['problemList'][i]['ZT'] + '(' + data['problemList'][i]['ZT_len'] + ')' + "</td>";
         }
         if (data['source'] == 'SDUT')
             Url = 'http://acm.sdut.edu.cn/onlinejudge2/index.php/Home/Index/problemdetail/pid/' + data['problemList'][i]['problem'] + '.html';
@@ -15,6 +15,8 @@ function setTable(stepId) {
             Url = 'http://poj.org/problem?id=' + data['problemList'][i]['problem'];
         else if (data['source'] == 'HDU')
             Url = 'http://acm.hdu.edu.cn/showproblem.php?pid=' + data['problemList'][i]['problem'];
+        else if (data['source'] == 'UVA')
+            Url = 'https://vjudge.net/problem/UVA-' + data['problemList'][i]['problem'];
         else
             Url = '#';
         proData = proData + "<td><a href=\"" + Url + "\" target=\"_blank\" title=\"" + data['problemList'][i]['title'] + "\">" + data['source'] + " " + data['problemList'][i]['problem'] + "</a></td>";
