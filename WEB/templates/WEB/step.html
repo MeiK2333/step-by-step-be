@@ -58,6 +58,36 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">说明</h4>
+                </div>
+                <div class="modal-body" id="myModalBody">
+                    <h4>训练计划表格中每一个单元格的内容表示什么？</h4>
+                    <p>每一个单元格表示用户该题的完成情况。单元格的内容有如下几种情况：</p>
+                    <ul>
+                        <li>空白：该用户此题还未提交过。</li>
+                        <li>浅绿色：该用户此题提交通过，并显示首次提交通过的时间。</li>
+                        <li>深绿色：满足上一条，且是 7 天内的提交，则颜色加深为深绿色。</li>
+                        <li>浅红色：该用户此题已提交但未通过，并显示最近一次提交的时间。</li>
+                        <li>深红色：满足上一条，且是 7 天内的提交，则颜色加深为深红色。</li>
+                    </ul>
+                    <br />
+                    <h4>我只想看自己的训练完成情况，怎么办？</h4>
+                    <p>点击训练计划上方表头的姓名即可打开个人页面，你可以收藏自己的个人页面，随时查看训练完成情况。</p>
+                    <br />
+                    <h4>为什么我刚刚提交的记录刷新以后看不到，但是等一会再刷新就能看到了？</h4>
+                    <p>由于训练计划参加人数很多，抓取所有用户的数据需要不少时间，抓取过于频繁也可能导致被对应平台封禁IP，因此我们会每隔一段时间进行数据更新。目前为每小时进行一次更新。</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="row-fluid">
@@ -76,6 +106,7 @@
                         <ul class="nav navbar-nav">
                             <li><a data-toggle="modal" data-target="#statisticsModal" href="javascript:void(0)">统计</a></li>
                             <li><a data-toggle="modal" data-target="#myModal" href="javascript:void(0)">关于</a></li>
+                            <li><a data-toggle="modal" data-target="#faqModal" href="javascript:void(0)">说明</a></li>
                         </ul>
                     </div>
                 </div>
