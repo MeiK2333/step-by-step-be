@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% from "_formhelpers.html" import render_field %} {% block title %}Register{% endblock %} {% block
+body %}
+<div class="col-lg-4 col-lg-offset-4 col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+    <form method="POST" class="bs-example bs-example-form">
+        {{ form.hidden_tag() }}
+        {{ render_field(form.username, class_='form-control') }}
+        {{ render_field(form.password, class_='form-control') }}
+        {{ render_field(form.password2, class_='form-control')
+        }} {{ form.submit }}
+    </form>
+</div>
+{% endblock %}

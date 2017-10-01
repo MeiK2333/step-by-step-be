@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>StepByStep</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="static/css/sbs.min.css?v3.0.4" rel="stylesheet">
+    <script src="static/js/jquery-1.12.4.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico" />
+    <meta charset="utf-8">
+    <style>
+        .main {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-header {
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+            text-shadow: none;
+            background-color: transparent;
+            border: 0;
+        }
+
+        .register-form {
+            border: 1px solid #d8dee2;
+            background-color: #fefefe;
+            padding: 25px;
+            border-radius: 8px;
+            margin-right: auto;
+            margin-left: auto;
+            width: 300px;
+        }
+
+        .input-block {
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .btn-block {
+            color: #fff;
+            background-color: #28a745;
+            background-image: linear-gradient(-180deg, #34d058 0%, #28a745 90%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="everything">
+        <div class="banner">
+            <div class="container">
+            </div>
+        </div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">StepByStep</a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a data-toggle="modal" data-target="#myModal" href="javascript:void(0)">关于</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li><a data-toggle="modal" data-target="#loginModal" href="javascript:void(0)">Login</a></li>
+                        <li><a data-toggle="modal" data-target="#registerModal" href="javascript:void(0)">Register</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main">
+        <div class="form-header">
+            <h2>Register in StepByStep</h2>
+        </div>
+        <div class="register-form">
+
+            <label>Username</label>
+            <input class="form-control input-block" name="login" type="text">
+            <label>Password</label>
+            <input class="form-control form-control input-block">
+
+            <input class="btn btn-block" type="submit" value="Login">
+        </div>
+    </div>
+
+</body>
+
+</html>
