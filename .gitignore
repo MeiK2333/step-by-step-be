@@ -1,1 +1,4 @@
-*.[pyc]
+*.pyc
+*.log
+*.swp
+*.MD
