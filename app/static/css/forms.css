@@ -18,8 +18,18 @@
 }
 
 .input-block {
-    border-radius: 4px !important;
     margin-bottom: 15px;
+}
+
+.font-error {
+    float: right;
+    color: red;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.input-error {
+    border: 1px solid rgba(214, 14, 14, 0.5);
 }
 
 .btn-block {

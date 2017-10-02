@@ -4,4 +4,6 @@
 # 依赖
 - python2.7
 - Flask
-- 
+- flask_login
+- flask_wtf
+- flask_mongoengine

@@ -1,12 +1,27 @@
-{% extends 'base.html' %} {% from "_formhelpers.html" import render_field %} {% block title %}Register{% endblock %} {% block
-body %}
-<div class="col-lg-4 col-lg-offset-4 col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
-    <form method="POST" class="bs-example bs-example-form">
-        {{ form.hidden_tag() }}
-        {{ render_field(form.username, class_='form-control') }}
-        {{ render_field(form.password, class_='form-control') }}
-        {{ render_field(form.password2, class_='form-control')
-        }} {{ form.submit }}
-    </form>
+{% extends 'base.html' %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}Register{% endblock %}
+{% block head %}<link href="/static/css/forms.css" rel="stylesheet">{% endblock %}
+{% block body %}
+
+<div class="main">
+    <div class="form-header">
+        <h2>Register to StepByStep</h2>
+    </div>
+    <div class="register-form">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ render_field(form.user_name, class_='form-control input-block') }}
+            {{ render_field(form.password, class_='form-control input-block') }}
+            {{ render_field(form.password2, class_='form-control input-block') }}
+            {{ form.submit(class_='btn btn-block') }}
+        </form>
+    </div>
 </div>
+
+{% endblock %}
+{% block foot %}
+<script>
+    $(".font-error").next().addClass('input-error')
+</script>
 {% endblock %}
