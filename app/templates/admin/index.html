@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Admin{% endblock %}
+{% block head %}
+<script src="/static/js/admin.js"></script>
+<link href="/static/css/admin.css" rel="stylesheet">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+{% endblock %}
+{% block body %}
+
+<div class="container">
+    <h2><a href="javascript:void(0)" onclick="RE_nick_name_modal()" id="nick_name"></a></h2>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr id="thead">
+            </tr>
+        </thead>
+        <tbody class="vertical-middle" id="tbody">
+        </tbody>
+    </table>
+    <span class="input-group-btn">
+        <button class="btn btn-default" onclick="new_plan_modal()">新建计划</button>
+    </span>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                </h4>
+            </div>
+            <div class="modal-body" id="myModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" id="myModalSubmit">
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form name="fileForm" id="fileForm" style="display: none;">
+    <input type="file" id="upFile" name="file" />
+</form>
+
+{% endblock %}
+{% block foot %}
+<script>
+    var sources = [{% for i in sources %}'{{ i }}',{% endfor %}];
+</script>
+{% endblock %}

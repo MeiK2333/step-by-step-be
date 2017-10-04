@@ -42,7 +42,7 @@ def check_user_exist(user_name, source):
             return False
     elif source == 'VJ':
         try:
-            url = 'https://cn.vjudge.net/user/' + user_name
+            url = 'https://vjudge.net/user/' + user_name
             data = requests.get(url)
             if data.status_code == 200:
                 return True
