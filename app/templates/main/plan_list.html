@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Plans{% endblock %}
+{% block head %}{% endblock %}
+{% block body %}
+<div class="container">
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr id="thead">
+            <th style="width: 10%;">编号</th>
+            <th style="width: 25%;">计划名称</th>
+            <th style="width: 20%;">来源</th>
+            <th style="width: 20%;">人数</th>
+            <th style="width: 20%;">题数</th>
+        </tr>
+    </thead>
+    <tbody class="vertical-middle" id="tbody">
+        {% for plan in plans %}
+        <tr>
+            <td>{{ plan.sort_id }}</td>
+            <td style="text-align: left;">
+                <a target="_blank" href="{{ url_for('main.step', name=plan.root, sort_id=plan.sort_id) }}">{{ plan.name }}</a>
+            </td>
+            <td>{{ plan.source }}</td>
+            <td>{{ plan.plan_user_cnt }}</td>
+            <td>{{ plan.plan_body_cnt }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
+{% block foot %}
+{% endblock %}

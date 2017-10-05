@@ -2,7 +2,7 @@
 from . import api
 from flask import request, jsonify
 from flask_login import login_required, current_user
-from ..models import User, Plan
+from ..models import User, Plan, PlanData
 from config import Config
 import json
 
@@ -186,3 +186,8 @@ def post_this_plan_body():
     plan.plan_body_cnt = len(plan_body)
     plan.save()
     return jsonify({'code': 0})
+
+@api.route('/plan/data/<name>/<int:sort_id>/')
+def get_plan_data(name, sort_id):
+    plan_data = PlanData.objects(root=name, sort_id=sort_id).first()
+    return jsonify(plan_data)

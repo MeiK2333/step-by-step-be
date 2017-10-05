@@ -11,7 +11,7 @@ class User(UserMixin, db.Document):
     user_name = db.StringField(max_length=50) # 用户名
     password_hash = db.StringField(max_length=128) # 密码（hash后）
     nick_name = db.StringField(max_length=128)
-    display = db.BooleanField(default=False) # 是否可见
+    display = db.BooleanField(default=True) # 是否可见
     plan_cnt = db.IntField(default=0) # 已创建的计划数量
     email = db.StringField(max_length=128)
 
@@ -43,6 +43,17 @@ class Info(db.Document):
     root = db.StringField(max_length=50) # 所属域
     user_id = db.StringField(max_length=50) # 该用户唯一标识
     plan_list = db.ListField(default=[]) # 该用户参与的计划列表
+
+class PlanData(db.Document):
+    ''' 计划的数据 '''
+    root = db.StringField()
+    name = db.StringField()
+    source = db.StringField()
+    sort_id = db.IntField()
+    p_id = db.IntField()
+    plan_body = db.ListField()
+    plan_user = db.ListField()
+    plan_data = db.DictField()
 
 class Plan(db.Document):
     ''' 计划 '''

@@ -343,11 +343,11 @@ function body_list_modal(sort_id, source) {
         <tr class="step-header"><th>专题</th><th>专项</th><th>题目</th></tr></thead><tbody>';
         for (var i = 0; i < data.length; i++) {
             table_body += '<tr>';
-            if (data[i]['ZT']) {
-                table_body += "<td rowspan=\"" + data[i]['ZT_len'] + "\">" + data[i]['ZT'] + "</td>";
-            }
             if (data[i]['ZX']) {
                 table_body += "<td rowspan=\"" + data[i]['ZX_len'] + "\">" + data[i]['ZX'] + "</td>";
+            }
+            if (data[i]['ZT']) {
+                table_body += "<td rowspan=\"" + data[i]['ZT_len'] + "\">" + data[i]['ZT'] + "</td>";
             }
             table_body += "<td>" + data[i]['problem'] + "</td></tr>";
         }
@@ -375,13 +375,13 @@ function update_body_list(sort_id, source, data) {
         var d = {'problem': '' + data['data'][i][2]};
         zx_len++;
         zt_len++;
-        if (data['data'][i][1] !== '') {
-            d['ZX'] = '' + data['data'][i][1];
+        if (data['data'][i][0] !== '') {
+            d['ZX'] = '' + data['data'][i][0];
             d['ZX_len'] = zx_len;
             zx_len = 0;
         }
-        if (data['data'][i][0] !== '') {
-            d['ZT'] = '' + data['data'][i][0];
+        if (data['data'][i][1] !== '') {
+            d['ZT'] = '' + data['data'][i][1];
             d['ZT_len'] = zt_len;
             zt_len = 0;
         }
