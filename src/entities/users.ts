@@ -20,5 +20,5 @@ export class User {
 
   @Field(type => [Bind])
   @OneToMany(type => Bind, bind => bind.user, { lazy: true })
-  bind: Lazy<Bind[]>
+  binds: Lazy<Bind[]>
 }

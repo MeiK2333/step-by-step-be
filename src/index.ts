@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import { Container } from 'typedi';
 import { UserResolver } from './resolvers/user';
 import { OjResolver } from './resolvers/oj';
+import { sdutProblemSpider } from './cron';
 
 export interface Context {
   user?: { id: number }
@@ -44,3 +45,6 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+// 每天凌晨更新题目数据
+sdutProblemSpider.start();

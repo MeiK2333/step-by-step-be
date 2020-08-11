@@ -13,16 +13,16 @@ export class Bind {
   id: number
 
   @Field(type => User)
-  @ManyToOne(type => User, user => user.bind, { lazy: true })
+  @ManyToOne(type => User, user => user.binds, { lazy: true })
   user: Lazy<User>
 
   @Field(type => Source)
-  @ManyToOne(type => Source, source => source.bind, { lazy: true })
+  @ManyToOne(type => Source, source => source.binds, { lazy: true })
   source: Lazy<Source>
 
   @Field(type => [Solution])
   @OneToMany(type => Solution, solution => solution.bind, { lazy: true, cascade: ['insert'] })
-  solution: Lazy<Solution[]>
+  solutions: Lazy<Solution[]>
 
   @Field(type => String)
   @Column()

@@ -28,7 +28,7 @@ export class UserResolver {
     const user = this.userRepository.create({
       username: u.username,
       password: await bcrypt.hash(u.password, 10),
-      bind: [],
+      binds: [],
     });
     await this.userRepository.save(user);
     return user;
@@ -61,7 +61,8 @@ export class UserResolver {
       source = this.sourceRepository.create({
         name: account.source,
         solutions: [],
-        bind: []
+        binds: [],
+        problems: [],
       });
       await this.sourceRepository.save(source);
     }
@@ -80,7 +81,7 @@ export class UserResolver {
         user,
         source,
         username: account.username,
-        solution: [],
+        solutions: [],
       });
     }
     await this.bindRepository.save(bind);
