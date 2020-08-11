@@ -7,6 +7,7 @@ import { buildSchema } from 'type-graphql';
 import jwt from 'jsonwebtoken';
 import { Container } from 'typedi';
 import { UserResolver } from './resolvers/user';
+import { OjResolver } from './resolvers/oj';
 
 export interface Context {
   user?: { id: number }
@@ -17,7 +18,7 @@ TypeORM.useContainer(Container);
 async function bootstrap() {
   const connection = await createConnection();
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, OjResolver],
     container: Container,
     validate: false
   });

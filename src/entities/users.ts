@@ -1,6 +1,7 @@
 import { Bind } from './bind';
 import { OneToMany, PrimaryGeneratedColumn, Entity, Column, Index } from 'typeorm';
 import { Field, ID, ObjectType } from 'type-graphql';
+import { Lazy } from './lazy';
 
 @Entity()
 @ObjectType()
@@ -18,6 +19,6 @@ export class User {
   password: string
 
   @Field(type => [Bind])
-  @OneToMany(type => Bind, bind => bind.user)
-  bind: Bind[]
+  @OneToMany(type => Bind, bind => bind.user, { lazy: true })
+  bind: Lazy<Bind[]>
 }

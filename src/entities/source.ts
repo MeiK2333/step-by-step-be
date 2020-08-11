@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "ty
 import { Field, ID, ObjectType } from "type-graphql";
 import { Solution } from "./solution";
 import { Bind } from "./bind";
+import { Lazy } from "./lazy";
 
 @Entity()
 @ObjectType()
@@ -15,10 +16,10 @@ export class Source {
   name: string
 
   @Field(type => [Solution])
-  @OneToMany(type => Solution, solution => solution.source)
-  solutions: Solution[]
+  @OneToMany(type => Solution, solution => solution.source, { lazy: true })
+  solutions: Lazy<Solution[]>
 
   @Field(type => [Bind])
-  @OneToMany(type => Bind, bind => bind.source)
-  bind: Bind[]
+  @OneToMany(type => Bind, bind => bind.source, { lazy: true })
+  bind: Lazy<Bind[]>
 }
