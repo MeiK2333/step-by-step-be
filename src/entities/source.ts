@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, Unique } from "typeorm";
 import { Field, ID, ObjectType } from "type-graphql";
 import { Solution } from "./solution";
 import { Bind } from "./bind";
@@ -14,6 +14,7 @@ export class Source {
 
   @Field()
   @Column()
+  @Unique(['name'])
   name: string
 
   @Field(type => [Solution])

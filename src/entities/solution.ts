@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Index } from "typeorm";
 import { Field, ID, ObjectType, registerEnumType } from "type-graphql";
 import { Source } from "./source";
 import { Bind } from "./bind";
@@ -22,7 +22,23 @@ registerEnumType(Result, {
   description: 'result'
 });
 
+export enum Language {
+  C = 0,
+  Cpp = 1,
+  Java = 2,
+  Pascal = 3,
+  Fortran = 4,
+  Python = 5,
+  Unknown = 6,
+}
+
+registerEnumType(Language, {
+  name: 'Language',
+  description: 'language'
+});
+
 @Entity()
+@Index(['source', 'runId'])
 @ObjectType()
 export class Solution {
   @Field(type => ID)
@@ -34,6 +50,7 @@ export class Solution {
   source: Lazy<Source>
 
   @Field(type => Bind)
+  @Index()
   @ManyToOne(type => Bind, bind => bind.solutions, { lazy: true })
   bind: Lazy<Bind>
 
@@ -65,11 +82,12 @@ export class Solution {
   @Column()
   codeLength: number
 
-  @Field(type => String)
+  @Field(type => Language)
   @Column()
-  language: string
+  language: Language
 
   @Field(type => Date)
+  @Index()
   @Column()
   submittedAt: Date
 }

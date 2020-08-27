@@ -6,5 +6,5 @@ export class BindInput {
   username: string
 
   @Field()
-  source: string
+  sourceId: number
 }

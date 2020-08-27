@@ -8,7 +8,10 @@ import jwt from 'jsonwebtoken';
 import { Container } from 'typedi';
 import { UserResolver } from './resolvers/user';
 import { OjResolver } from './resolvers/oj';
-import { sdutProblemSpider } from './cron';
+import { sdutProblemSpider, vjudgeProblemSpider } from './cron';
+import { ojs } from './ojs';
+import { Source } from './entities/source';
+import { SDUTSpider } from './spider/sdut';
 
 export interface Context {
   user?: { id: number }
@@ -18,6 +21,14 @@ TypeORM.useContainer(Container);
 
 async function bootstrap() {
   const connection = await createConnection();
+  for (const oj of ojs) {
+    const o = await connection.getRepository(Source).findOne({name: oj});
+    if (!o) {
+      const o = new Source();
+      o.name = oj;
+      await connection.manager.save(o);
+    }
+  }
   const schema = await buildSchema({
     resolvers: [UserResolver, OjResolver],
     container: Container,
@@ -46,5 +57,5 @@ async function bootstrap() {
 
 bootstrap();
 
-// 每天凌晨更新题目数据
 sdutProblemSpider.start();
+vjudgeProblemSpider.start();

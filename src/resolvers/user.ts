@@ -53,20 +53,8 @@ export class UserResolver {
 
   @Mutation(returns => Bind)
   async bindSource(@Arg('account') account: BindInput, @Ctx() ctx: Context) {
-    if (!ojs.includes(account.source)) {
-      throw new ValidationError(`'${account.source}' not found`);
-    }
-    let source = await this.sourceRepository.findOne({ name: account.source });
-    if (!source) {
-      source = this.sourceRepository.create({
-        name: account.source,
-        solutions: [],
-        binds: [],
-        problems: [],
-      });
-      await this.sourceRepository.save(source);
-    }
-    // TODO: 验证账号所有权
+    let source = await this.sourceRepository.findOne(account.sourceId);
+    // TODO: 验证账号所有权 or 管理员可绑定
     const b = await this.bindRepository.findOne({ username: account.username, source });
     if (b) {
       return b;

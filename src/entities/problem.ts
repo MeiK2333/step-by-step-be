@@ -1,10 +1,11 @@
 import { Source } from "./source"
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, Index } from "typeorm"
 import { ObjectType, Field, ID } from "type-graphql"
 import { Lazy } from "./lazy"
 import { Solution } from "./solution"
 
 @Entity()
+@Index(['problemId', 'source'])
 @ObjectType()
 export class Problem {
   @Field(type => ID)

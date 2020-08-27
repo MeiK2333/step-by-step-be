@@ -18,6 +18,7 @@ export class SDUTSpider {
     while (page * pageSize < count) {
       page++;
       const url = `https://acm.sdut.edu.cn/onlinejudge2/index.php/API_ng/problems?page=${page}&limit=${pageSize}`;
+      console.log(url);
       const { data } = await axios.get(url);
       count = data.data.count;
       for (const row of data.data.rows) {
