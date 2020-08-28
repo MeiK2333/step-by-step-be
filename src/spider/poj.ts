@@ -75,8 +75,7 @@ export class PojSpider {
         if (!problem) {
           continue;
         }
-        const solution = await solutionRepository.findOne({ source, runId }) || new Solution();
-        solution.source = source;
+        const solution = await solutionRepository.findOne({ bind: user, runId }) || new Solution();
         solution.bind = user;
         solution.problem = problem;
         solution.runId = runId;
@@ -126,13 +125,12 @@ export class PojSpider {
           problem.title = title;
           problem.updatedAt = new Date();
         } else {
-          problem = problemRepository.create({
-            source,
-            title: title,
-            problemId: pid,
-            link: `http://poj.org/problem?id=${pid}`,
-            updatedAt: new Date()
-          });
+          problem = new Problem();
+          problem.source = source;
+          problem.title = title;
+          problem.problemId = pid;
+          problem.link = `http://poj.org/problem?id=${pid}`;
+          problem.updatedAt = new Date();
         }
         await connection.manager.save(problem);
       }

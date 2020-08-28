@@ -27,7 +27,7 @@ export class VjudgeSpider {
           continue;
         }
         // VJ 数据每个题目仅保留一份数据
-        const solution = await solutionRepository.findOne({ source, problem: problem }) || new Solution();
+        const solution = await solutionRepository.findOne({ bind: user, problem: problem }) || new Solution();
         solution.problem = problem;
         // 仅保存 AC 的数据，因为没有 AC 的数据也无法获取具体信息
         solution.result = Result.Accepted;
@@ -39,7 +39,6 @@ export class VjudgeSpider {
         solution.codeLength = 0;
         solution.language = Language.Unknown;
         solution.nickname = user.username;
-        solution.source = source;
         await connection.manager.save(solution);
       }
     }
@@ -67,13 +66,12 @@ export class VjudgeSpider {
           problem.title = p.title;
           problem.updatedAt = new Date();
         } else {
-          problem = problemRepository.create({
-            source,
-            title: p.title,
-            problemId: pid,
-            link: `https://vjudge.net/problem/${pid}`,
-            updatedAt: new Date()
-          });
+          problem = new Problem();
+          problem.source = source;
+          problem.title = p.title;
+          problem.problemId = pid;
+          problem.link = `https=//vjudge.net/problem/${pid}`;
+          problem.updatedAt = new Date();
         }
         await problemRepository.save(problem);
       }

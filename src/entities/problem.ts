@@ -30,7 +30,7 @@ export class Problem {
 
   @Field(type => [Solution])
   @OneToMany(type => Solution, solution => solution.problem, { lazy: true })
-  solutions: Solution[]
+  solutions: Lazy<Solution[]>
 
   @Field(type => Date)
   @Column()

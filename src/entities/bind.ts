@@ -21,7 +21,7 @@ export class Bind {
   source: Lazy<Source>
 
   @Field(type => [Solution])
-  @OneToMany(type => Solution, solution => solution.bind, { lazy: true, cascade: ['insert'] })
+  @OneToMany(type => Solution, solution => solution.bind, { lazy: true })
   solutions: Lazy<Solution[]>
 
   @Field(type => String)

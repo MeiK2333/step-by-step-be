@@ -1,6 +1,6 @@
 import { Problem } from "../entities/problem";
 import axios from 'axios';
-import { getConnection } from "typeorm";
+import { getConnection, createConnection } from "typeorm";
 import { Source } from "../entities/source";
 import { Bind } from "../entities/bind";
 import { Solution, Result, Language } from "../entities/solution";
@@ -80,8 +80,7 @@ export class SDUTSpider {
           continue;
         }
         const runId = String(row.solutionId);
-        const solution = await solutionRepository.findOne({ source, runId }) || new Solution();
-        solution.source = source;
+        const solution = await solutionRepository.findOne({ bind: user, runId }) || new Solution();
         solution.bind = user;
         solution.problem = problem;
         solution.runId = runId;
@@ -118,16 +117,21 @@ export class SDUTSpider {
           problem.title = row.title;
           problem.updatedAt = new Date();
         } else {
-          problem = problemRepository.create({
-            source,
-            title: row.title,
-            problemId: String(row.problemId),
-            link: `https://acm.sdut.edu.cn/onlinejudge3/problems/${row.problemId}`,
-            updatedAt: new Date()
-          });
+          problem = new Problem();
+          problem.source = source;
+          problem.title = row.title;
+          problem.problemId = String(row.problemId);
+          problem.link = `https://acm.sdut.edu.cn/onlinejudge3/problems/${row.problemId}`;
+          problem.updatedAt = new Date();
         }
         await problemRepository.save(problem);
       }
     }
   }
 }
+
+(async () => {
+  await createConnection();
+  const spider = new SDUTSpider();
+  await spider.fetchProblems();
+})();

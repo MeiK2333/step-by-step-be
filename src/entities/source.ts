@@ -17,10 +17,6 @@ export class Source {
   @Unique(['name'])
   name: string
 
-  @Field(type => [Solution])
-  @OneToMany(type => Solution, solution => solution.source, { lazy: true })
-  solutions: Lazy<Solution[]>
-
   @Field(type => [Bind])
   @OneToMany(type => Bind, bind => bind.source, { lazy: true })
   binds: Lazy<Bind[]>

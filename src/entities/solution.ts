@@ -39,16 +39,12 @@ registerEnumType(Language, {
 });
 
 @Entity()
-@Index(['source', 'runId'])
+@Index(['bind', 'runId'])
 @ObjectType()
 export class Solution {
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Field(type => Source)
-  @ManyToOne(type => Source, source => source.solutions, { lazy: true })
-  source: Lazy<Source>
 
   @Field(type => Bind)
   @Index()
