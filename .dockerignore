@@ -1,0 +1,10 @@
+.git
+.vscode
+node_modules
+**/node_modules
+.DS_Store
+docker-compose.yml
+README.md
+db.sqlite3
+venv
+dist
