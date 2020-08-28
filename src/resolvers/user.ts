@@ -20,37 +20,6 @@ export class UserResolver {
     @InjectRepository(Source) private readonly sourceRepository: Repository<Source>
   ) { }
 
-  @Mutation(returns => User)
-  async register(@Arg('user') u: UserInput) {
-    if (await this.userRepository.findOne({ username: u.username })) {
-      throw new ValidationError(`user '${u.username}' was exists`);
-    }
-    const user = this.userRepository.create({
-      username: u.username,
-      password: await bcrypt.hash(u.password, 10),
-      binds: [],
-    });
-    await this.userRepository.save(user);
-    return user;
-  }
-
-  @Mutation(returns => String)
-  async login(@Arg('user') u: UserInput) {
-    const user = await this.userRepository.findOne({ username: u.username });
-    if (!user) {
-      throw new AuthenticationError(`user '${u.username}' is not found`);
-    }
-    const valid = await bcrypt.compare(u.password, user.password);
-    if (!valid) {
-      throw new AuthenticationError('username or password error');
-    }
-    return jwt.sign(
-      { id: user.id },
-      process.env.JWT_SECRET || '',
-      { expiresIn: '365d' }
-    )
-  }
-
   @Mutation(returns => Bind)
   async bindSource(@Arg('account') account: BindInput, @Ctx() ctx: Context) {
     let source = await this.sourceRepository.findOne(account.sourceId);

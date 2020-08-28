@@ -30,6 +30,7 @@ export enum Language {
   Fortran = 4,
   Python = 5,
   Unknown = 6,
+  CSharp = 7,
 }
 
 registerEnumType(Language, {

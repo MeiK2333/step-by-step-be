@@ -15,8 +15,9 @@ export class User {
   @Column()
   username: string
 
+  @Field()
   @Column()
-  password: string
+  nickname: string
 
   @Field(type => [Bind])
   @OneToMany(type => Bind, bind => bind.user, { lazy: true })

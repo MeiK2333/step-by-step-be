@@ -50,13 +50,10 @@ export class PojSpider {
       return;
     }
     const last = await connection.getRepository(Solution).findOne({ where: { bind: user, source }, order: { submittedAt: 'DESC' } });
-    let top = -1;
+    // 从上次的位置开始爬取
+    let bottom = last ? Number(last.runId) : 0;
     while (1) {
-      // 爬取到上次的位置就停
-      if (top != -1 && last && top < Number(last.runId)) {
-        break;
-      }
-      const url = `http://poj.org/status?user_id=${user.username}&top=${top}`;
+      const url = `http://poj.org/status?user_id=${user.username}&bottom=${bottom}`;
       console.log(url);
       const { data } = await axios.get(url);
       const root = parse(data, { lowerCaseTagName: true });
@@ -91,8 +88,9 @@ export class PojSpider {
         solution.codeLength = len;
         solution.submittedAt = subTime;
         await connection.manager.save(solution);
-        top = Number(runId);
+        bottom = bottom > Number(runId) ? bottom : Number(runId);
       }
+      // 当条数不足时，说明爬完了
       if (trs.length <= 20) {
         break;
       }

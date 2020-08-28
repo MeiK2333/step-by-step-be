@@ -45,7 +45,6 @@ export class VjudgeSpider {
     }
   }
   async fetchProblems() {
-    // TODO: 添加重试等机制，保证数据全面
     const connection = getConnection();
     const problemRepository = connection.getRepository(Problem);
     const source = await connection.getRepository(Source).findOne({ name: 'vjudge' });
