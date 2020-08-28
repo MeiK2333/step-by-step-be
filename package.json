@@ -42,7 +42,6 @@
     "node-html-parser": "^1.2.20",
     "pg": "^8.3.3",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.0.0",
     "task-runner": "git+https://github.com/MeiK2333/task-runner.git",
     "type-graphql": "^1.0.0-rc.3",
     "typedi": "^0.8.0",
