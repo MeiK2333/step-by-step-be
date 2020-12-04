@@ -15,6 +15,7 @@ class Source(models.Model):
 
 class Problem(models.Model):
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    problem_id = models.CharField(max_length=32)
     title = models.CharField(max_length=128)
     link = models.CharField(max_length=256)
 
