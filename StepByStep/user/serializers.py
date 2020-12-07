@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
+from user.models import GitHubUser
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,3 +14,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ["url", "name"]
 
+
+class GitHubUserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = GitHubUser
+        fields = ["username", "avatar_url", "url", "html_url"]
