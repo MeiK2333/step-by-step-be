@@ -1,6 +1,5 @@
 from django.db import models
 
-
 SOURCES = (("sdut", "sdut"), ("poj", "poj"))
 RESULTS = (("ac", "Accepted"), ("wa", "WrongAnswer"))
 LANGUAGES = (("c", "C"), ("cpp", "CPP"), ("py", "Python"))
@@ -24,9 +23,12 @@ class Problem(models.Model):
 
 
 class SourceUser(models.Model):
-    user = models.ForeignKey("auth.user", on_delete=models.CASCADE)
+    user = models.ForeignKey("auth.user", related_name="source_users", on_delete=models.CASCADE)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     username = models.CharField(max_length=128)
+
+    class Meta:
+        unique_together = ('user', 'source')
 
     def __str__(self):
         return self.username

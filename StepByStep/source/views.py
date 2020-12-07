@@ -1,4 +1,3 @@
-from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 
 from source.models import Problem, Solution, Source, SourceUser
@@ -17,10 +16,10 @@ class SourceViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [ReadOnly]
 
 
-class SourceUserViewSet(viewsets.ReadOnlyModelViewSet):
+class SourceUserViewSet(viewsets.ModelViewSet):
     queryset = SourceUser.objects.all()
     serializer_class = SourceUserSerializer
-    permission_classes = [ReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class ProblemViewSet(viewsets.ReadOnlyModelViewSet):

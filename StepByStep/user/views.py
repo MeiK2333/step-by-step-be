@@ -4,10 +4,13 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from user.models import GitHubUser
+from source.models import Source, SourceUser
+from source.serializers import SourceUserSerializer
 from user.serializers import GitHubUserSerializer, GroupSerializer, UserSerializer
 
 
