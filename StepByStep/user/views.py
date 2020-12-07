@@ -3,8 +3,7 @@ from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
-from rest_framework import permissions, status, viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -13,7 +12,8 @@ from user.serializers import GitHubUserSerializer, GroupSerializer, UserSerializ
 
 
 class LoginAPIView(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         if request.user.is_authenticated:
             return Response(GitHubUserSerializer(request.user.github_user).data)
         client_id = settings.CLIENT_ID
@@ -67,7 +67,8 @@ class LoginAPIView(APIView):
 
 
 class LogoutAPIView(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         logout(request)
         return Response({"success": True})
 
