@@ -23,12 +23,12 @@ class Problem(models.Model):
 
 
 class SourceUser(models.Model):
-    user = models.ForeignKey("auth.user", related_name="source_users", on_delete=models.CASCADE)
+    user = models.ManyToManyField("auth.user", related_name="source_users")
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     username = models.CharField(max_length=128)
 
     class Meta:
-        unique_together = ('user', 'source')
+        unique_together = ('source', 'username')
 
     def __str__(self):
         return self.username

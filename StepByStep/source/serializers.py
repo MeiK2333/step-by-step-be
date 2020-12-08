@@ -12,7 +12,7 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
 class SourceUserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SourceUser
-        fields = ["user", "source", "username"]
+        fields = ["source", "username"]
 
 
 class ProblemSerializer(serializers.HyperlinkedModelSerializer):

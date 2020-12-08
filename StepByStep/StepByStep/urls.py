@@ -16,6 +16,8 @@ router.register(r"users", user_views.UserViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
+
+    path(r"bind/", user_views.BindSourceUserAPIView.as_view()),
     path(r"login/", user_views.LoginAPIView.as_view()),
     path(r"logout/", user_views.LogoutAPIView.as_view()),
 ]

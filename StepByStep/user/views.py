@@ -76,6 +76,17 @@ class LogoutAPIView(APIView):
         return Response({"success": True})
 
 
+class BindSourceUserAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    @staticmethod
+    def post(request):
+        source_user_id = request.data.get('source_user')
+        source_user = SourceUser.objects.get(pk=source_user_id)
+        source_user.user.add(request.user)
+        return Response({"success": True})
+
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
