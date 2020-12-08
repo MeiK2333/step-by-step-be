@@ -16,10 +16,10 @@ class SourceViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [ReadOnly]
 
 
-class SourceUserViewSet(viewsets.ModelViewSet):
+class SourceUserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = SourceUser.objects.all()
     serializer_class = SourceUserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [ReadOnly]
 
 
 class ProblemViewSet(viewsets.ReadOnlyModelViewSet):

@@ -10,8 +10,9 @@ from rest_framework.views import APIView
 
 from user.models import GitHubUser
 from source.models import Source, SourceUser
-from source.serializers import SourceUserSerializer
 from user.serializers import GitHubUserSerializer, GroupSerializer, UserSerializer
+from user.spider.poj_user import poj_user
+from user.spider.sdut_user import sdut_user
 
 
 class LoginAPIView(APIView):
@@ -81,9 +82,25 @@ class BindSourceUserAPIView(APIView):
 
     @staticmethod
     def post(request):
-        source_user_id = request.data.get('source_user')
-        source_user = SourceUser.objects.get(pk=source_user_id)
-        source_user.user.add(request.user)
+        source_id = request.data.get('source')
+        username = request.data.get('username')
+        source = Source.objects.get(pk=source_id)
+
+        if source.name == 'sdut':
+            nickname = sdut_user(username)
+        elif source.name == 'poj':
+            nickname = poj_user(username)
+        else:
+            return Response({"success": False, "errmsg": "source not found"}, status=status.HTTP_404_NOT_FOUND)
+        if nickname is None:
+            return Response({"success": False, "errmsg": "user not found"}, status=status.HTTP_404_NOT_FOUND)
+        SourceUser.objects.update_or_create(
+            user=request.user,
+            source=source,
+            defaults={
+                "username": username,
+                "nickname": nickname
+            })
         return Response({"success": True})
 
 

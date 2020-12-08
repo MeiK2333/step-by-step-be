@@ -13,11 +13,15 @@ app.conf.update(
     CELERYBEAT_SCHEDULE={
         "sdut-problem": {
             "task": "source.tasks.sdut_problems_task",
-            "schedule": timedelta(minutes=12),
+            "schedule": timedelta(hours=12),
+        },
+        "sdut-solutions": {
+            "task": "source.tasks.sdut_solutions_task",
+            "schedule": timedelta(minutes=30),
         },
         "poj-problem": {
             "task": "source.tasks.poj_problems_task",
-            "schedule": timedelta(minutes=12),
+            "schedule": timedelta(hours=12),
         }
     }
 )

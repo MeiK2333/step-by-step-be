@@ -2,7 +2,7 @@ from django.db import models
 
 SOURCES = (("sdut", "sdut"), ("poj", "poj"))
 RESULTS = (("ac", "Accepted"), ("wa", "WrongAnswer"))
-LANGUAGES = (("c", "C"), ("cpp", "CPP"), ("py", "Python"))
+LANGUAGES = (("c", "C"), ("cpp", "CPP"), ("py", "Python"), ("java", "Java"), ("c#", "C#"))
 
 
 class Source(models.Model):
@@ -23,12 +23,15 @@ class Problem(models.Model):
 
 
 class SourceUser(models.Model):
-    user = models.ManyToManyField("auth.user", related_name="source_users")
+    user = models.ForeignKey("auth.user", related_name="source_users", on_delete=models.CASCADE)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     username = models.CharField(max_length=128)
+    nickname = models.CharField(max_length=128)
+
+    last_solution_id = models.IntegerField(default=0)
 
     class Meta:
-        unique_together = ('source', 'username')
+        unique_together = ('source', 'user')
 
     def __str__(self):
         return self.username
@@ -44,3 +47,6 @@ class Solution(models.Model):
     length = models.IntegerField()
     run_id = models.CharField(max_length=32)
     submitted_at = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('source_user', 'run_id')

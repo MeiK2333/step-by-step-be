@@ -5,7 +5,7 @@ from source.models import Problem, Source
 
 
 def sdut_problems():
-    session_url = "https://acm.sdut.edu.cn/onlinejudge3/api/getSession?_t=" + str(
+    session_url = "https://acm.sdut.edu.cn/onlinejudge3/api/getSession?t=" + str(
         time.time() * 1000
     )
     resp = requests.get(session_url)
