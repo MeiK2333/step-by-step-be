@@ -5,6 +5,7 @@ fastapi==0.63.0
 h11==0.12.0
 idna==2.10
 pydantic==1.8.1
+python-dotenv==0.15.0
 requests==2.25.1
 starlette==0.13.6
 typing-extensions==3.7.4.3

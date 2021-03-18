@@ -1,6 +1,12 @@
-import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+
+from models.db import get_db
+from models.group import Group
+from models.step import Step
+from models.step_problem import StepProblem
+from models.step_user import StepUser
 
 app = FastAPI()
 
@@ -21,72 +27,58 @@ def read_root():
 
 
 @app.get("/groups")
-def group_list():
-    resp = requests.get("https://stepbystep.sdutacm.cn/API/GetOrgList")
-    data = []
-    for item in resp.json()["list"]:
-        data.append({"id": item["id"], "code": item["shortName"], "name": item["name"]})
-    return data
+def group_list(db: Session = Depends(get_db)):
+    groups = db.query(Group).filter().all()
+    return groups
 
 
-@app.get("/group/{group_id}/set")
-def group_set(group_id: int):
-    resp = requests.get(
-        f"https://stepbystep.sdutacm.cn/API/GetStepList?orgId={group_id}"
-    )
-    data = []
-    for item in resp.json()["list"]:
-        data.append(
+@app.get("/group/{group_id}/steps")
+def group_steps(group_id: int, db: Session = Depends(get_db)):
+    group = db.query(Group).get(group_id)
+    steps = group.steps
+    rst = []
+    for step in steps:
+        prob = db.query(StepProblem).filter_by(step=step).count()
+        usr = db.query(StepUser).filter_by(step=step).count()
+        rst.append(
             {
-                "id": item["id"],
-                "source": item["source"],
-                "name": item["title"],
-                "problem": item["problemCount"],
-                "person": item["userCount"],
+                "id": step.id,
+                "name": step.name,
+                "source": step.source,
+                "problemCount": prob,
+                "userCount": usr,
             }
         )
-    return data
+    return rst
 
 
 @app.get("/group/{group_id}")
-def group(group_id: int):
-    resp = requests.get("https://stepbystep.sdutacm.cn/API/GetOrgList")
-    for item in resp.json()["list"]:
-        if item["id"] == group_id:
-            return item
-    return {}
+def group_detail(group_id: int, db: Session = Depends(get_db)):
+    return db.query(Group).get(group_id)
 
 
-@app.get("/set/{set_id}/problems")
-def set_problems(set_id: int):
-    resp = requests.get(f"https://stepbystep.sdutacm.cn/API/GetStep?stepId={set_id}")
-    return resp.json()["problemList"]
-
-
-@app.get("/set/{set_id}")
-def set_detail(set_id: int):
-    resp = requests.get(
-        f"https://stepbystep.sdutacm.cn/API/GetStep?stepId={set_id}"
-    ).json()
-    for item in resp["userList"]:
-        item["id"] = item["userId"]
-        item.pop("userId")
-        item.pop("class")
-        item.pop("count")
-    data = {
-        "problems": resp["problemList"],
-        "persons": resp["userList"],
-        "name": resp["title"],
-    }
-    prob_set = set()
-    for problem in data['problems']:
-        prob_set.add(problem['problem'])
-    for person in data["persons"]:
-        username = person.pop("userName")
+@app.get("/step/{step_id}")
+def step_detail(step_id: int, db: Session = Depends(get_db)):
+    step = db.query(Step).get(step_id)
+    prob = db.query(StepProblem).filter_by(step=step).order_by(StepProblem.order).all()
+    problems = []
+    for pro in prob:
+        problems.append(
+            {
+                "order": pro.order,
+                "project": pro.project,
+                "topic": pro.topic,
+                "problem": pro.problem.problem_id,
+                "link": pro.problem.link,
+                "title": pro.problem.title,
+            }
+        )
+    usr = db.query(StepUser).filter_by(step=step).all()
+    users = []
+    for user in usr:
+        users.append({"id": user.user.id, "username": user.user.username})
+    data = {"problems": problems, "users": users, "name": step.name}
+    for person in data["users"]:
         solutions = {}
-        for key, value in resp["data"][username].items():
-            if key not in prob_set:
-                continue
-            solutions[key] = {"result": "Accepted", "date": value}
         person["solutions"] = solutions
     return data
