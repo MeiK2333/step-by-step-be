@@ -5,12 +5,13 @@ from models.db import Base
 from models.source import Source
 
 
-class Problem(Base):
-    __tablename__ = "problems"
+class BindUser(Base):
+    __tablename__ = "bind_user"
     id = Column(Integer, primary_key=True, index=True)
-    problem_id = Column(String)
+    username = Column(String, index=True)
 
     source_id = Column(Integer, ForeignKey("sources.id"))
-    source = relationship(Source, backref="problems")
-    title = Column(String, default="")
-    link = Column(String, default="")
+    source = relationship(Source, backref="bind_users")
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("User", backref="bind_users")

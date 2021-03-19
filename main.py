@@ -7,6 +7,7 @@ from models.group import Group
 from models.step import Step
 from models.step_problem import StepProblem
 from models.step_user import StepUser
+from models.user import get_step_solutions
 
 app = FastAPI()
 
@@ -65,6 +66,7 @@ def step_detail(step_id: int, db: Session = Depends(get_db)):
     for pro in prob:
         problems.append(
             {
+                "id": pro.problem.id,
                 "order": pro.order,
                 "project": pro.project,
                 "topic": pro.topic,
@@ -75,10 +77,15 @@ def step_detail(step_id: int, db: Session = Depends(get_db)):
         )
     usr = db.query(StepUser).filter_by(step=step).all()
     users = []
-    for user in usr:
-        users.append({"id": user.user.id, "username": user.user.username})
+    for step_usr in usr:
+        solutions = get_step_solutions(step_usr.user, step, db)
+        users.append(
+            {
+                "id": step_usr.user.id,
+                "username": step_usr.user.username,
+                "solutions": solutions,
+            }
+        )
     data = {"problems": problems, "users": users, "name": step.name}
-    for person in data["users"]:
-        solutions = {}
-        person["solutions"] = solutions
+
     return data
