@@ -36,6 +36,9 @@ class Solution(Base):
     language = Column(Enum(LanguageEnum))
     submitted_at = Column(DateTime)
 
+    bind_user_id = Column(Integer, ForeignKey("bind_user.id"))
+    bind_user = relationship("BindUser", backref="solutions")
+
     problem_id = Column(Integer, ForeignKey("problems.id"))
     problem = relationship(Problem, backref="solutions")
 

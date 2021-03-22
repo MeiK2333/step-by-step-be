@@ -7,3 +7,4 @@ class Source(Base):
     __tablename__ = "sources"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
+    link = Column(String)

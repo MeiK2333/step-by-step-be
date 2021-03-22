@@ -7,7 +7,7 @@ from models.group import Group
 from models.step import Step
 from models.step_problem import StepProblem
 from models.step_user import StepUser
-from models.user import get_step_solutions
+from models.user import get_step_solutions, User
 
 app = FastAPI()
 
@@ -82,10 +82,34 @@ def step_detail(step_id: int, db: Session = Depends(get_db)):
         users.append(
             {
                 "id": step_usr.user.id,
+                "nickname": step_usr.nickname,
                 "username": step_usr.user.username,
+                "class": step_usr.clazz,
                 "solutions": solutions,
             }
         )
     data = {"problems": problems, "users": users, "name": step.name}
 
+    return data
+
+
+@app.get("/user/{username}")
+def user_detail(username: str, db: Session = Depends(get_db)):
+    data = {"steps": [], "bind_users": []}
+    user = db.query(User).filter_by(username=username).first()
+    data["username"] = user.username
+    data["robot"] = user.robot
+    for usr in user.step_users:
+        data["steps"].append(
+            {
+                "id": usr.step.id,
+                "name": usr.step.name,
+                "nickname": usr.nickname,
+                "class": usr.clazz,
+            }
+        )
+    for usr in user.bind_users:
+        data["bind_users"].append(
+            {"source": usr.source.name, "username": usr.username, "link": usr.link}
+        )
     return data

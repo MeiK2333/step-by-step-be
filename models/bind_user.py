@@ -9,6 +9,7 @@ class BindUser(Base):
     __tablename__ = "bind_user"
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, index=True)
+    link = Column(String)
 
     source_id = Column(Integer, ForeignKey("sources.id"))
     source = relationship(Source, backref="bind_users")

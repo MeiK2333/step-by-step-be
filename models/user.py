@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import Column, Integer, String, select
+from sqlalchemy import Column, Integer, String, select, Boolean
 from sqlalchemy.orm import Session
 
 from models.bind_user import BindUser
 from models.db import Base
+from models.problem import Problem
 from models.solution import Solution, ResultEnum
 from models.step import Step
 from models.step_problem import StepProblem
@@ -16,16 +17,20 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True)
 
+    robot = Column(Boolean, default=False)
+
 
 def get_step_solutions(user: User, step: Step, db: Session):
     # 查询该用户所有的绑定账号
-    bind_query = select(BindUser.username).where(BindUser.user == user)
-    problem_query = select(StepProblem.problem_id).where(StepProblem.step == step)
+    bind_query = select(BindUser.id).where(BindUser.user == user)
+    problem_query = (
+        select(Problem.id).join(StepProblem).where(StepProblem.step == step)
+    )
     # 查找该用户所有绑定账号中在指定 step 中存在的题目的提交
     solutions: List[Solution] = (
         db.query(Solution)
         .filter(
-            Solution.username.in_(bind_query), Solution.problem_id.in_(problem_query)
+            Solution.bind_user_id.in_(bind_query), Solution.problem_id.in_(problem_query)
         )
         # 提交时间从久到新
         .order_by(Solution.submitted_at)
