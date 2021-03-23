@@ -1,6 +1,5 @@
 import time
 from datetime import datetime, timedelta
-from functools import reduce
 
 import requests
 from sqlalchemy import create_engine
@@ -138,7 +137,9 @@ def to_solution(row: dict) -> dict:
     data["username"] = row["user"]["username"]
     data["nickname"] = row["user"]["nickname"]
     # 时区转换，python datetime 并不完全符合 ISO 标准，因此手动偏移时区
-    data["submitted_at"] = datetime.strptime(row["createdAt"], "%Y-%m-%dT%H:%M:%S.000Z") + timedelta(hours=8)
+    data["submitted_at"] = datetime.strptime(
+        row["createdAt"], "%Y-%m-%dT%H:%M:%S.000Z"
+    ) + timedelta(hours=8)
     return data
 
 
