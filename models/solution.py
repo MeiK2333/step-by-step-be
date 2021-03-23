@@ -1,26 +1,10 @@
-import enum
-
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, DateTime
 from sqlalchemy.orm import relationship
 
 from models.db import Base
 from models.problem import Problem
 from models.source import Source
-
-
-class ResultEnum(enum.Enum):
-    Accepted = 1
-    WrongAnswer = 2
-    # ...
-    Unknown = 999
-
-
-class LanguageEnum(enum.Enum):
-    C = 1
-    Cpp = 2
-    Python = 3
-    Java = 4
-    Unknown = 999
+from schemas.enums import ResultEnum, LanguageEnum
 
 
 class Solution(Base):
