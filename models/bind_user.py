@@ -8,8 +8,8 @@ from models.source import Source
 class BindUser(Base):
     __tablename__ = "bind_user"
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, index=True)
-    link = Column(String)
+    username = Column(String(length=64), index=True)
+    link = Column(String(length=256))
 
     last_spider = Column(Integer, default=0)
 

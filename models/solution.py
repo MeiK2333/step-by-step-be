@@ -11,8 +11,8 @@ class Solution(Base):
     __tablename__ = "solutions"
     id = Column(Integer, primary_key=True, index=True)
 
-    username = Column(String, index=True)
-    nickname = Column(String)
+    username = Column(String(length=64), index=True)
+    nickname = Column(String(length=64))
     result = Column(Enum(ResultEnum))
     time_used = Column(Integer)
     memory_used = Column(Integer)

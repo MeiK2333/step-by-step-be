@@ -9,8 +9,8 @@ class StepUser(Base):
     __tablename__ = "step_user"
     id = Column(Integer, primary_key=True, index=True)
 
-    clazz = Column(String)
-    nickname = Column(String)
+    clazz = Column(String(length=64))
+    nickname = Column(String(length=64))
 
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship(User, backref="step_users")

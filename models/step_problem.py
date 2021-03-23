@@ -9,8 +9,8 @@ class StepProblem(Base):
     __tablename__ = "step_problem"
     id = Column(Integer, primary_key=True, index=True)
 
-    project = Column(String, nullable=True, comment="专项")
-    topic = Column(String, nullable=True, comment="专题")
+    project = Column(String(length=64), nullable=True, comment="专项")
+    topic = Column(String(length=64), nullable=True, comment="专题")
     order = Column(Integer)
 
     problem_id = Column(Integer, ForeignKey("problems.id"))
