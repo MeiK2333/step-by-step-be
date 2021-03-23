@@ -140,3 +140,5 @@ cython_debug/
 celerybeat-schedule.db
 .idea
 init.py
+dist
+step-by-step.service
