@@ -94,6 +94,8 @@ def to_language_enum(raw_language: str) -> LanguageEnum:
         language = language.Java
     elif raw_language == "typescript":
         language = language.TypeScript
+    elif raw_language == 'c#':
+        language = language.CSharp
     return language
 
 
@@ -149,7 +151,7 @@ def main():
     with engine.connect() as connection:
         bind_users = connection.execute(
             text(
-                "select bind_user.id as bid, * from bind_user "
+                "select *, bind_user.id as bid from bind_user "
                 "left join sources s "
                 "on s.id = bind_user.source_id "
                 "where s.name = 'SDUT'"

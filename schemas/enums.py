@@ -24,5 +24,6 @@ class LanguageEnum(enum.Enum):
     Rust = 6
     JavaScript = 7
     TypeScript = 8
+    CSharp = 9
     Unknown = 999
 
