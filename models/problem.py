@@ -12,5 +12,5 @@ class Problem(Base):
 
     source_id = Column(Integer, ForeignKey("sources.id"))
     source = relationship(Source, backref="problems")
-    title = Column(String, default="")
-    link = Column(String, default="")
+    title = Column(String(length=128), default="")
+    link = Column(String(length=256), default="")
