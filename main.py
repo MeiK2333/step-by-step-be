@@ -1,17 +1,24 @@
 from datetime import datetime
 
+import aiohttp
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
+from config import CLIENT_ID, CLIENT_SECRET
 from models.db import get_db
 from models.group import Group
 from models.step import Step, get_step_solutions
 from models.step_problem import StepProblem
 from models.step_user import StepUser
 from models.user import User
+from schemas.auth import create_access_token, Auth, get_current_auth
 from schemas.enums import ResultEnum
+from schemas.exception import SBSException, exception_handler
 
 app = FastAPI()
+
+
+app.add_exception_handler(SBSException, exception_handler)
 
 
 @app.get("/")
@@ -133,3 +140,44 @@ def user_detail(username: str, db: Session = Depends(get_db)):
             {"source": usr.source.name, "username": usr.username, "link": usr.link}
         )
     return data
+
+
+@app.get("/login")
+async def login(code: str = None, db: Session = Depends(get_db)):
+    if not code:
+        raise SBSException(errmsg="请提供 Code")
+    # 总超时时间 10S
+    timeout = aiohttp.ClientTimeout(total=10)
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        async with session.post(
+            "https://github.com/login/oauth/access_token",
+            json={"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET, "code": code},
+            headers={"accept": "application/json"},
+
+        ) as resp:
+            body = await resp.json()
+            if "error" in body:
+                raise SBSException(errmsg=body['error'])
+            access_token = body["access_token"]
+        async with session.get(
+            "https://api.github.com/user",
+            headers={
+                "accept": "application/json",
+                "Authorization": f"token {access_token}",
+            },
+        ) as resp:
+            user_dict = await resp.json()
+    if not user_dict:
+        raise SBSException(errmsg="System error!")
+    access_token = create_access_token(user_dict, db=db)
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/login_url")
+def login_url():
+    return f"https://github.com/login/oauth/authorize?client_id={CLIENT_ID}"
+
+
+@app.get("/me")
+async def read_users_me(current_auth: Auth = Depends(get_current_auth)):
+    return current_auth
