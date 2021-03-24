@@ -167,7 +167,6 @@ def main():
                 logger.info(f"crawl solutions {len(rows)} rows")
                 for row in rows:
                     param = to_solution(row)
-                    param["id"] = None
                     param["bind_user_id"] = bind_user.bid
                     param["source_id"] = bind_user.source_id
                     problem_id = connection.execute(
@@ -188,10 +187,10 @@ def main():
                     connection.execute(
                         text(
                             "insert into solutions "
-                            "(id, username, nickname, result, time_used, memory_used, "
+                            "(username, nickname, result, time_used, memory_used, "
                             "code_len, language, submitted_at, bind_user_id, problem_id, source_id) "
                             "values "
-                            "(:id, :username, :nickname, :result, :time_used, :memory_used, "
+                            "(:username, :nickname, :result, :time_used, :memory_used, "
                             ":code_len, :language, :submitted_at, :bind_user_id, :problem_id, :source_id)"
                         ),
                         param,
