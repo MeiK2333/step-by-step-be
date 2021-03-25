@@ -52,14 +52,14 @@ def create_access_token(
     user = db.query(AuthModel).filter(AuthModel.username == username).first()
     if user is None:
         # 因为此处的数据是从 GitHub 获取而非用户提交，因此可以信任，直接创建入库
-        db_user = AuthModel(
-            username=data.get("login"),
-            email=data.get("email", ""),
-            nickname=data.get("name", ""),
-        )
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
+        db_user = AuthModel(username=data.get("login"))
+    else:
+        db_user = user
+    db_user.email = data.get("email", "")
+    db_user.nickname = db.get("name", "")
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
