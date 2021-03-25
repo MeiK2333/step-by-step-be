@@ -27,7 +27,9 @@ class Auth(BaseModel):
 async def get_current_auth(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
-    credentials_exception = SBSException(errmsg="Could not validate credentials", errcode=401)
+    credentials_exception = SBSException(
+        errmsg="Could not validate credentials", errcode=401
+    )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms="HS256")
         username: str = payload.get("username")
@@ -44,6 +46,7 @@ async def get_current_auth(
 def create_access_token(
     data: dict, expires_delta: Optional[timedelta] = None, db: Session = None
 ):
+    data["username"] = data["login"]
     to_encode = {"username": data.get("username")}
     username: str = to_encode.get("username")
     user = db.query(AuthModel).filter(AuthModel.username == username).first()
@@ -51,8 +54,8 @@ def create_access_token(
         # 因为此处的数据是从 GitHub 获取而非用户提交，因此可以信任，直接创建入库
         db_user = AuthModel(
             username=data.get("login"),
-            email=data.get("email"),
-            nickname=data.get("name"),
+            email=data.get("email", ""),
+            nickname=data.get("name", ""),
         )
         db.add(db_user)
         db.commit()
