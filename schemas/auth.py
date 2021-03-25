@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -10,11 +10,20 @@ from sqlalchemy.orm import Session
 
 from config import SECRET_KEY
 from models.db import get_db
-from models.user import User as AuthModel
+from models.user import User
+from models.role import Role as RoleModel
 from schemas.exception import SBSException
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+class Role(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
 
 
 class Auth(BaseModel):
@@ -22,6 +31,10 @@ class Auth(BaseModel):
     username: str
     email: str
     nickname: Optional[str] = None
+    roles: List[Role] = []
+
+    class Config:
+        orm_mode = True
 
 
 async def get_current_auth(
@@ -37,10 +50,18 @@ async def get_current_auth(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    auth = db.query(AuthModel).filter(AuthModel.username == username).first()
+    auth = db.query(User).filter(User.username == username).first()
     if auth is None:
         raise credentials_exception
     return auth
+
+
+async def get_current_admin(auth=Depends(get_current_auth)):
+    roles: List[RoleModel] = auth.roles
+    for role in roles:
+        if role.name == "admin":
+            return auth
+    raise SBSException(errmsg="无权进行此操作", errcode=403)
 
 
 def create_access_token(
@@ -49,10 +70,10 @@ def create_access_token(
     data["username"] = data["login"]
     to_encode = {"username": data.get("username")}
     username: str = to_encode.get("username")
-    user = db.query(AuthModel).filter(AuthModel.username == username).first()
+    user = db.query(User).filter(User.username == username).first()
     if user is None:
         # 因为此处的数据是从 GitHub 获取而非用户提交，因此可以信任，直接创建入库
-        db_user = AuthModel(username=data.get("login"))
+        db_user = User(username=data.get("login"))
     else:
         db_user = user
     db_user.email = data.get("email", "")

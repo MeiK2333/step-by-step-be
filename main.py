@@ -1,22 +1,21 @@
 from datetime import datetime
-from typing import List
 
 import aiohttp
 from fastapi import FastAPI, Depends
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from config import CLIENT_ID, CLIENT_SECRET
+from logger import module_logger
 from models.db import get_db
 from models.group import Group
 from models.step import Step, get_step_solutions
 from models.step_problem import StepProblem
 from models.step_user import StepUser
 from models.user import User
-from schemas.auth import create_access_token, Auth, get_current_auth
+from schemas.auth import create_access_token, Auth, get_current_auth, get_current_admin
 from schemas.enums import ResultEnum
 from schemas.exception import SBSException, exception_handler
-from models.role import Role
-from logger import module_logger
 
 logger = module_logger("stepbystep")
 
@@ -129,6 +128,8 @@ def step_detail(step_id: int, db: Session = Depends(get_db)):
 def user_detail(username: str, db: Session = Depends(get_db)):
     data = {"steps": [], "bind_users": []}
     user = db.query(User).filter_by(username=username).first()
+    if not user:
+        raise SBSException(errmsg="User not found!")
     data["username"] = user.username
     data["robot"] = user.robot
     for usr in user.step_users:
@@ -177,8 +178,8 @@ async def login(code: str = None, db: Session = Depends(get_db)):
             ) as resp:
                 user_dict = await resp.json()
     except Exception as ex:
-        logger.warn(ex)
-        raise SBSException(errmsg="与认证服务器连线受限，请稍后重试")
+        logger.warn(repr(ex))
+        raise SBSException(errmsg="与认证服务器连接受限，请稍后重试")
 
     if not user_dict:
         raise SBSException(errmsg="System error!")
@@ -187,8 +188,58 @@ async def login(code: str = None, db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/me")
+@app.get("/me", response_model=Auth)
 async def read_users_me(current_auth: Auth = Depends(get_current_auth)):
-    roles: List[Role] = current_auth.roles
-    print(roles)
+    roles = current_auth.roles
     return current_auth
+
+
+@app.delete("/group/{group_id}")
+def delete_group(
+    group_id: int,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    db.query(Group).filter_by(id=group_id).delete()
+    db.commit()
+    return {}
+
+
+class EditGroupRequest(BaseModel):
+    id: int
+    name: str
+    code: str
+
+
+@app.post("/group/{group_id}")
+def edit_group(
+    group_id: int,
+    request: EditGroupRequest,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    group = db.query(Group).get(group_id)
+    if not group:
+        raise SBSException(errmsg="group not found")
+    group.name = request.name
+    group.code = request.code
+    db.add(group)
+    db.commit()
+    return {}
+
+
+class NewGroupRequest(BaseModel):
+    name: str
+    code: str
+
+
+@app.post("/group")
+def new_group(
+    request: NewGroupRequest,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    group = Group(name=request.name, code=request.code)
+    db.add(group)
+    db.commit()
+    return group
