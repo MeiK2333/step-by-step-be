@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 import aiohttp
 from fastapi import FastAPI, Depends
@@ -14,6 +15,7 @@ from models.user import User
 from schemas.auth import create_access_token, Auth, get_current_auth
 from schemas.enums import ResultEnum
 from schemas.exception import SBSException, exception_handler
+from models.role import Role
 
 app = FastAPI()
 
@@ -153,11 +155,10 @@ async def login(code: str = None, db: Session = Depends(get_db)):
             "https://github.com/login/oauth/access_token",
             json={"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET, "code": code},
             headers={"accept": "application/json"},
-
         ) as resp:
             body = await resp.json()
             if "error" in body:
-                raise SBSException(errmsg=body['error'])
+                raise SBSException(errmsg=body["error"])
             access_token = body["access_token"]
         async with session.get(
             "https://api.github.com/user",
@@ -173,11 +174,8 @@ async def login(code: str = None, db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/login_url")
-def login_url():
-    return f"https://github.com/login/oauth/authorize?client_id={CLIENT_ID}"
-
-
 @app.get("/me")
 async def read_users_me(current_auth: Auth = Depends(get_current_auth)):
+    roles: List[Role] = current_auth.roles
+    print(roles)
     return current_auth

@@ -5,17 +5,18 @@ from alembic import context
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+
+from models.bind_user import BindUser
+from models.db import Base
 from models.group import Group
-from models.step import Step
 from models.problem import Problem
+from models.role import Role
+from models.solution import Solution
+from models.source import Source
+from models.step import Step
 from models.step_problem import StepProblem
 from models.step_user import StepUser
 from models.user import User
-from models.source import Source
-from models.solution import Solution
-from models.bind_user import BindUser
-
-from models.db import Base
 
 load_dotenv()
 
@@ -33,7 +34,9 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 
 
-print(Group, Step, Problem, StepProblem, User, StepUser, Source, Solution, BindUser)
+print(
+    Group, Step, Problem, StepProblem, User, StepUser, Source, Solution, BindUser, Role
+)
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

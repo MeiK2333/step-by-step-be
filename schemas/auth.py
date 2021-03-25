@@ -30,12 +30,12 @@ async def get_current_auth(
     credentials_exception = SBSException(errmsg="Could not validate credentials", errcode=401)
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms="HS256")
-        email: str = payload.get("email")
-        if email is None:
+        username: str = payload.get("username")
+        if username is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    auth = db.query(AuthModel).filter(AuthModel.email == email).first()
+    auth = db.query(AuthModel).filter(AuthModel.username == username).first()
     if auth is None:
         raise credentials_exception
     return auth
@@ -44,9 +44,9 @@ async def get_current_auth(
 def create_access_token(
     data: dict, expires_delta: Optional[timedelta] = None, db: Session = None
 ):
-    to_encode = {"email": data.get("email")}
-    email: str = to_encode.get("email")
-    user = db.query(AuthModel).filter(AuthModel.email == email).first()
+    to_encode = {"username": data.get("username")}
+    username: str = to_encode.get("username")
+    user = db.query(AuthModel).filter(AuthModel.username == username).first()
     if user is None:
         # 因为此处的数据是从 GitHub 获取而非用户提交，因此可以信任，直接创建入库
         db_user = AuthModel(
@@ -60,7 +60,7 @@ def create_access_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(hours=24)
+        expire = datetime.utcnow() + timedelta(days=365)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
     return encoded_jwt
