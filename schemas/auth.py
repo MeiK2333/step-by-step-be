@@ -56,7 +56,7 @@ def create_access_token(
     else:
         db_user = user
     db_user.email = data.get("email", "")
-    db_user.nickname = db.get("name", "")
+    db_user.nickname = data.get("name", "")
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
