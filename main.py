@@ -2,13 +2,15 @@ from datetime import datetime
 
 import aiohttp
 from fastapi import FastAPI, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from config import CLIENT_ID, CLIENT_SECRET
 from logger import module_logger
+from models.bind_user import BindUser
 from models.db import get_db
 from models.group import Group
+from models.source import Source
 from models.step import Step, get_step_solutions
 from models.step_problem import StepProblem
 from models.step_user import StepUser
@@ -211,7 +213,7 @@ class EditGroupRequest(BaseModel):
     code: str
 
 
-@app.post("/group/{group_id}")
+@app.put("/group/{group_id}")
 def edit_group(
     group_id: int,
     request: EditGroupRequest,
@@ -243,3 +245,175 @@ def new_group(
     db.add(group)
     db.commit()
     return group
+
+
+class EditStepRequest(BaseModel):
+    id: int
+    name: str
+
+
+@app.put("/group/{group_id}/step/{step_id}")
+def edit_step(
+    group_id: int,
+    step_id: int,
+    request: EditStepRequest,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    group = db.query(Group).get(group_id)
+    step = db.query(Step).get(step_id)
+    if step.group != group:
+        raise SBSException("how dare you")
+    step.name = request.name
+    db.add(step)
+    db.commit()
+    return {}
+
+
+@app.delete("/group/{group_id}/step/{step_id}")
+def delete_step(
+    group_id: int,
+    step_id: int,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    group = db.query(Group).get(group_id)
+    step = db.query(Step).get(step_id)
+    if step.group != group:
+        raise SBSException("how dare you")
+    db.query(Step).filter_by(id=step_id).delete()
+    db.commit()
+    return {}
+
+
+class NewStepRequest(BaseModel):
+    name: str
+
+
+@app.post("/group/{group_id}/step")
+def new_step(
+    group_id: int,
+    request: NewStepRequest,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    group = db.query(Group).get(group_id)
+    step = Step(name=request.name)
+    step.group = group
+    step.name = request.name
+    db.add(step)
+    db.commit()
+    return {}
+
+
+@app.get("/step/{step_id}/users")
+def step_users(step_id: int, db: Session = Depends(get_db)):
+    resp = []
+    for step_user in db.query(StepUser).filter_by(step_id=step_id).all():
+        step_user: StepUser
+        bind_users = step_user.user.bind_users
+        item = {
+            "id": step_user.id,
+            "class": step_user.clazz,
+            "nickname": step_user.nickname,
+            "bind_users": [],
+        }
+        for bind_user in bind_users:
+            bind_user: BindUser
+            item["bind_users"].append(
+                {
+                    "username": bind_user.username,
+                    "link": bind_user.link,
+                    "source": bind_user.source.name,
+                }
+            )
+        resp.append(item)
+
+    return resp
+
+
+@app.delete("/group/{group_id}/step/{step_id}/user/{step_user_id}")
+def delete_step_user(
+    group_id: int,
+    step_id: int,
+    step_user_id: int,
+    db: Session = Depends(get_db),
+    _current_auth: Auth = Depends(get_current_admin),
+):
+    """ 从指定的计划中删除指定的用户，注意，这并不会修改已绑定的账号关系（只是从当前计划中移除） """
+    step_user = db.query(StepUser).get(step_user_id)
+    db.delete(step_user)
+    db.commit()
+    return {}
+
+
+class NewStepUserRequest(BaseModel):
+    username: str
+    nickname: str
+    clazz: str = Field(None, alias="class")
+    source: str
+
+
+@app.post("/group/{group_id}/step/{step_id}/user")
+def new_step(
+    group_id: int,
+    step_id: int,
+    request: NewStepUserRequest,
+    db: Session = Depends(get_db),
+    current_auth: Auth = Depends(get_current_admin),
+):
+    # TODO: 此处的逻辑需要明确整理一下
+    group = db.query(Group).get(group_id)
+    step = db.query(Step).get(step_id)
+    if step.group != group:
+        raise SBSException(errmsg="how dare you!")
+    step_user: StepUser = (
+        db.query(StepUser)
+        .filter_by(nickname=request.nickname, clazz=request.clazz, step=step)
+        .first()
+    )
+    source = db.query(Source).filter_by(name=request.source).first()
+    if not source:
+        raise SBSException(errmsg="Source 不存在！")
+    if step_user:
+        # 如果该计划已有该用户
+        # 如果与之前的 source 不同，则为该用户添加一条 bind
+        # 否则直接报错
+        for bind_user in step_user.user.bind_users:
+            bind_user: BindUser
+            if bind_user.source == source:
+                raise SBSException(errmsg="该用户已存在")
+        # 如果该绑定不存在，则创建
+        bind_user = db.query(BindUser).filter_by(source=source, username=request.username).first()
+        if not bind_user:
+            bind_user = BindUser()
+            bind_user.source = source
+            bind_user.username = request.username
+        bind_user.user = step_user.user
+        db.add(bind_user)
+        db.commit()
+        return {}
+    # 管理员导入的账号会自动创建一个用户
+    username = source.name + "-" + request.username
+    user = db.query(User).filter_by(username=username).first()
+    if not user:
+        user = User()
+        user.robot = True
+        user.username = username
+        db.add(user)
+        db.commit()
+        bind_user = BindUser()
+        bind_user.source = source
+        bind_user.username = request.username
+        bind_user.user = user
+        db.add(bind_user)
+        db.commit()
+
+    step_user = StepUser()
+    step_user.user = user
+    step_user.nickname = request.nickname
+    step_user.clazz = request.clazz
+    step_user.step = step
+    db.add(step_user)
+    db.commit()
+    return {}
