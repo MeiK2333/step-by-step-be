@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from models.db import Base
@@ -14,3 +14,5 @@ class Problem(Base):
     source = relationship(Source, backref="problems")
     title = Column(String(length=128), default="")
     link = Column(String(length=256), default="")
+
+    __table_args__ = (UniqueConstraint("source_id", "problem_id"),)
