@@ -29,7 +29,7 @@ class Role(BaseModel):
 class Auth(BaseModel):
     id: int
     username: str
-    email: str
+    email: Optional[str] = None
     nickname: Optional[str] = None
     roles: List[Role] = []
 
