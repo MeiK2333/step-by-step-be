@@ -8,6 +8,7 @@ from sqlalchemy import text
 from config import SDUT_SPIDER_USER, SDUT_SPIDER_PASS, SQLALCHEMY_DATABASE_URL
 from logger import module_logger
 from schemas.enums import ResultEnum, LanguageEnum
+from multiprocessing import Pool
 
 logger = module_logger("sdut_solutions")
 
@@ -22,12 +23,12 @@ def get_csrf(session: requests.Session):
 
 
 def login(username: str, password: str):
-    session = requests.Session()
-    csrf = get_csrf(session)
-    session.headers.update({"x-csrf-token": csrf})
+    login_session = requests.Session()
+    csrf = get_csrf(login_session)
+    login_session.headers.update({"x-csrf-token": csrf})
     login_url = "https://acm.sdut.edu.cn/onlinejudge3/api/login"
-    session.post(login_url, json={"loginName": username, "password": password})
-    return session
+    login_session.post(login_url, json={"loginName": username, "password": password})
+    return login_session
 
 
 def get_userid_by_username(username: str, session: requests.Session) -> int:
@@ -94,7 +95,7 @@ def to_language_enum(raw_language: str) -> LanguageEnum:
         language = language.Java
     elif raw_language == "typescript":
         language = language.TypeScript
-    elif raw_language == 'c#':
+    elif raw_language == "c#":
         language = language.CSharp
     return language
 
@@ -145,8 +146,70 @@ def to_solution(row: dict) -> dict:
     return data
 
 
+session = login(SDUT_SPIDER_USER, SDUT_SPIDER_PASS)
+
+
+def fetch_one(bind_user):
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    with engine.connect() as connection:
+        last_spider = bind_user.last_spider
+        logger.info(f"crawl {bind_user.username}")
+        try:
+            user_id = get_userid_by_username(bind_user.username, session)
+            logger.info(f"user_id = {user_id}")
+            rows = get_solution(user_id, last_spider, session)
+            logger.info(f"crawl solutions {len(rows)} rows")
+            for row in rows:
+                param = to_solution(row)
+                param["bind_user_id"] = bind_user.bid
+                param["source_id"] = bind_user.source_id
+                problem_id = connection.execute(
+                    text(
+                        "select id from problems "
+                        "where source_id = :source_id and problem_id = :problem_id"
+                    ),
+                    {
+                        "source_id": bind_user.source_id,
+                        "problem_id": str(row["problem"]["problemId"]),
+                    },
+                )
+                try:
+                    param["problem_id"] = next(problem_id).id
+                except StopIteration:  # 如果该提交所对应的题目不存在，则跳过该提交
+                    logger.warning(f"无对应题目：row = {row}!!!")
+                    continue
+                connection.execute(
+                    text(
+                        "insert into solutions "
+                        "(username, nickname, result, time_used, memory_used, "
+                        "code_len, language, submitted_at, bind_user_id, problem_id, source_id) "
+                        "values "
+                        "(:username, :nickname, :result, :time_used, :memory_used, "
+                        ":code_len, :language, :submitted_at, :bind_user_id, :problem_id, :source_id)"
+                    ),
+                    param,
+                )
+                last_spider = max(row["solutionId"], last_spider)
+        except KeyboardInterrupt:
+            logger.info("ctrl - c, break")
+            return
+        except Exception as ex:
+            logger.warning(repr(ex))
+        finally:
+            connection.execute(
+                text(
+                    "update bind_user set last_spider = :last_spider "
+                    "where username = :username and source_id = :source_id"
+                ),
+                {
+                    "last_spider": last_spider,
+                    "username": bind_user.username,
+                    "source_id": bind_user.source_id,
+                },
+            )
+
+
 def main():
-    session = login(SDUT_SPIDER_USER, SDUT_SPIDER_PASS)
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
     with engine.connect() as connection:
         bind_users = connection.execute(
@@ -157,62 +220,10 @@ def main():
                 "where s.name = 'SDUT'"
             )
         )
-        for bind_user in bind_users:
-            last_spider = bind_user.last_spider
-            logger.info(f"crawl {bind_user.username}")
-            try:
-                user_id = get_userid_by_username(bind_user.username, session)
-                logger.info(f"user_id = {user_id}")
-                rows = get_solution(user_id, last_spider, session)
-                logger.info(f"crawl solutions {len(rows)} rows")
-                for row in rows:
-                    param = to_solution(row)
-                    param["bind_user_id"] = bind_user.bid
-                    param["source_id"] = bind_user.source_id
-                    problem_id = connection.execute(
-                        text(
-                            "select id from problems "
-                            "where source_id = :source_id and problem_id = :problem_id"
-                        ),
-                        {
-                            "source_id": bind_user.source_id,
-                            "problem_id": str(row["problem"]["problemId"]),
-                        },
-                    )
-                    try:
-                        param["problem_id"] = next(problem_id).id
-                    except StopIteration:  # 如果该提交所对应的题目不存在，则跳过该提交
-                        logger.warning(f"无对应题目：row = {row}!!!")
-                        continue
-                    connection.execute(
-                        text(
-                            "insert into solutions "
-                            "(username, nickname, result, time_used, memory_used, "
-                            "code_len, language, submitted_at, bind_user_id, problem_id, source_id) "
-                            "values "
-                            "(:username, :nickname, :result, :time_used, :memory_used, "
-                            ":code_len, :language, :submitted_at, :bind_user_id, :problem_id, :source_id)"
-                        ),
-                        param,
-                    )
-                    last_spider = max(row["solutionId"], last_spider)
-            except KeyboardInterrupt:
-                logger.info("ctrl - c, break")
-                break
-            except Exception as ex:
-                logger.warning(repr(ex))
-            finally:
-                connection.execute(
-                    text(
-                        "update bind_user set last_spider = :last_spider "
-                        "where username = :username and source_id = :source_id"
-                    ),
-                    {
-                        "last_spider": last_spider,
-                        "username": bind_user.username,
-                        "source_id": bind_user.source_id,
-                    },
-                )
+        fetch_users = list(bind_users)
+
+    with Pool(32) as pool:
+        pool.map(fetch_one, fetch_users)
 
 
 if __name__ == "__main__":
