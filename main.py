@@ -12,6 +12,7 @@ from models.bind_user import BindUser
 from models.db import get_db
 from models.group import Group
 from models.problem import Problem
+from models.solution import Solution
 from models.source import Source
 from models.step import Step, get_step_solutions
 from models.step_problem import StepProblem
@@ -501,9 +502,11 @@ def edit_step_problems(
         source = db.query(Source).filter_by(name=item.source).first()
         if not source:
             raise SBSException(errmsg="Source not found!")
-        problem: Problem = db.query(Problem).filter_by(source=source, problem_id=item.problem).first()
+        problem: Problem = db.query(Problem).filter_by(
+            source=source, problem_id=item.problem
+        ).first()
         if not problem:
-            logger.warning(f'未知的题目！{item.source} - {item.problem}')
+            logger.warning(f"未知的题目！{item.source} - {item.problem}")
             problem = Problem()
             problem.source = source
             problem.problem_id = item.problem
@@ -525,3 +528,32 @@ def edit_step_problems(
         db.add(step_problem)
         db.commit()
     return {}
+
+
+@app.get("/solutions")
+def get_solutions(limit: int = 20, db: Session = Depends(get_db)):
+    if limit > 1000:
+        limit = 1000
+    resp = []
+    solutions = (
+        db.query(Solution).order_by(Solution.submitted_at.desc()).limit(limit).all()
+    )
+    for solution in solutions:
+        solution: Solution
+        resp.append(
+            {
+                "result": solution.result.name,
+                "time_used": solution.time_used,
+                "memory_used": solution.memory_used,
+                "username": solution.bind_user.user.username,
+                "nickname": solution.nickname,
+                "code_len": solution.code_len,
+                "submitted_at": solution.submitted_at.strftime("%Y-%m-%d %H:%M:%S"),
+                "language": solution.language.name,
+                "problem_id": solution.problem.problem_id,
+                "title": solution.problem.title,
+                "source": solution.problem.source.name,
+                'link': solution.problem.link,
+            }
+        )
+    return resp

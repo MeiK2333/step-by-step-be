@@ -18,7 +18,7 @@ class Solution(Base):
     memory_used = Column(Integer)
     code_len = Column(Integer)
     language = Column(Enum(LanguageEnum))
-    submitted_at = Column(DateTime)
+    submitted_at = Column(DateTime, index=True)
 
     bind_user_id = Column(Integer, ForeignKey("bind_user.id"))
     bind_user = relationship("BindUser", backref="solutions")
