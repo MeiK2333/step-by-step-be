@@ -28,7 +28,7 @@ def main():
         ).id
         for item in result:
             title = item["title"]
-            problem_id = f"{item['originOJ']} {item['originProb']}"[:32]
+            problem_id = f"{item['originOJ']} {item['originProb']}"
             link = f"https://vjudge.net/problem/{item['originOJ']}-{item['originProb']}"
 
             problem_query = connection.execute(

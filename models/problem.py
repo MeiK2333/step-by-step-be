@@ -8,7 +8,7 @@ from models.source import Source
 class Problem(Base):
     __tablename__ = "problems"
     id = Column(Integer, primary_key=True, index=True)
-    problem_id = Column(String(length=32), index=True)
+    problem_id = Column(String(length=128), index=True)
 
     source_id = Column(Integer, ForeignKey("sources.id"))
     source = relationship(Source, backref="problems")
