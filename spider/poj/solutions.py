@@ -112,37 +112,58 @@ def main():
         )
         for bind_user in bind_users:
             last_spider = bind_user.last_spider
-            rows = get_solution(bind_user.username, last_spider)
-            logger.info(f"crawl solutions {len(rows)} rows")
-            for row in rows:
-                param = to_solution(row)
+            try:
+                rows = get_solution(bind_user.username, last_spider)
+                logger.info(f"crawl solutions {len(rows)} rows")
+                for row in rows:
+                    param = to_solution(row)
 
-                param["source_id"] = bind_user.source_id
-                param["bind_user_id"] = bind_user.bid
-                problem_id = connection.execute(
-                    text(
-                        "select id from problems "
-                        "where source_id = :source_id and problem_id = :problem_id"
-                    ),
-                    {"problem_id": row["problem"], "source_id": bind_user.source_id},
-                )
-                try:
-                    param["problem_id"] = next(problem_id).id
-                except StopIteration:  # 如果该提交所对应的题目不存在，则跳过该提交
-                    logger.warning(f"无对应题目：row = {row}!!!")
-                    continue
+                    param["source_id"] = bind_user.source_id
+                    param["bind_user_id"] = bind_user.bid
+                    problem_id = connection.execute(
+                        text(
+                            "select id from problems "
+                            "where source_id = :source_id and problem_id = :problem_id"
+                        ),
+                        {
+                            "problem_id": row["problem"],
+                            "source_id": bind_user.source_id,
+                        },
+                    )
+                    try:
+                        param["problem_id"] = next(problem_id).id
+                    except StopIteration:  # 如果该提交所对应的题目不存在，则跳过该提交
+                        logger.warning(f"无对应题目：row = {row}!!!")
+                        continue
+                    connection.execute(
+                        text(
+                            "insert into solutions "
+                            "(username, nickname, result, time_used, memory_used, "
+                            "code_len, language, submitted_at, bind_user_id, problem_id, source_id) "
+                            "values "
+                            "(:username, :nickname, :result, :time_used, :memory_used, "
+                            ":code_len, :language, :submitted_at, :bind_user_id, :problem_id, :source_id)"
+                        ),
+                        param,
+                    )
+                    last_spider = max(int(row["run_id"]), last_spider)
+            except KeyboardInterrupt:
+                logger.info("ctrl - c, break")
+                break
+            except Exception as ex:
+                logger.warning(repr(ex))
+            finally:
                 connection.execute(
                     text(
-                        "insert into solutions "
-                        "(username, nickname, result, time_used, memory_used, "
-                        "code_len, language, submitted_at, bind_user_id, problem_id, source_id) "
-                        "values "
-                        "(:username, :nickname, :result, :time_used, :memory_used, "
-                        ":code_len, :language, :submitted_at, :bind_user_id, :problem_id, :source_id)"
+                        "update bind_user set last_spider = :last_spider "
+                        "where username = :username and source_id = :source_id"
                     ),
-                    param,
+                    {
+                        "last_spider": last_spider,
+                        "username": bind_user.username,
+                        "source_id": bind_user.source_id,
+                    },
                 )
-                last_spider = max(int(row["run_id"]), last_spider)
 
 
 if __name__ == "__main__":
