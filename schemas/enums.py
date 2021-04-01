@@ -25,5 +25,7 @@ class LanguageEnum(enum.Enum):
     JavaScript = 7
     TypeScript = 8
     CSharp = 9
+    Pascal = 10
+    Fortran = 11
     Unknown = 999
 
