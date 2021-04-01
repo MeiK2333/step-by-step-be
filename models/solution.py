@@ -1,12 +1,4 @@
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    ForeignKey,
-    Enum,
-    DateTime,
-    UniqueConstraint,
-)
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, DateTime, Index
 from sqlalchemy.orm import relationship
 
 from models.db import Base
@@ -37,4 +29,4 @@ class Solution(Base):
     source_id = Column(Integer, ForeignKey("sources.id"))
     source = relationship(Source, backref="steps")
 
-    __table_args__ = (UniqueConstraint("source_id", "bind_user_id"),)
+    __table_args__ = (Index("solution_bind_user_id_problem_id", "bind_user_id", "problem_id"),)
