@@ -145,6 +145,7 @@ def user_detail(username: str, db: Session = Depends(get_db)):
                 "name": usr.step.name,
                 "nickname": usr.nickname,
                 "class": usr.clazz,
+                'group': usr.step.group,
             }
         )
     for usr in user.bind_users:
