@@ -63,9 +63,9 @@ def get_solution(user_id: int, start: int, session: requests.Session):
             break
         for row in rows:
             res = to_result_enum(row["result"])
-            if res == ResultEnum.Unknown:  # 如果遇到未知的数据，直接中断，剩下的下次爬取再说
-                logger.warning(f"crawl result {res}, break!")
-                return result
+            if res == ResultEnum.Unknown:  # 如果遇到未知的数据，先跳过
+                logger.warning(f"crawl result {res}, continue!")
+                continue
             result.append(row)
             start = max(row["solutionId"], start)
     return result
