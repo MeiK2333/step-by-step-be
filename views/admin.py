@@ -106,6 +106,8 @@ def delete_step(
     step = db.query(Step).get(step_id)
     if step.group != group:
         raise SBSException("how dare you")
+    db.query(StepUser).filter_by(step_id=step_id).delete()
+    db.query(StepProblem).filter_by(step_id=step_id).delete()
     db.query(Step).filter_by(id=step_id).delete()
     db.commit()
     return {}

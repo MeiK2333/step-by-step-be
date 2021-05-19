@@ -15,5 +15,5 @@ class StepUser(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship(User, backref="step_users")
 
-    step_id = Column(Integer, ForeignKey("steps.id", ondelete='CASCADE'))
+    step_id = Column(Integer, ForeignKey("steps.id"))
     step = relationship("Step", backref="step_users")
