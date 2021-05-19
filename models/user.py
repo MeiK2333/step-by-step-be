@@ -10,4 +10,6 @@ class User(Base):
     email = Column(String(length=64), unique=True, index=True)
     nickname = Column(String(length=64), default="")
 
+    hashed_password = Column(String(length=256))
+
     robot = Column(Boolean, default=False)

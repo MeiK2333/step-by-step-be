@@ -37,6 +37,25 @@ class Auth(BaseModel):
         orm_mode = True
 
 
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+
+async def authenticate_user(
+    username: str, password: str, db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        return None
+    if not verify_password(password, user.hashed_password):
+        return None
+    return user
+
+
 async def get_current_auth(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
@@ -65,22 +84,9 @@ async def get_current_admin(auth=Depends(get_current_auth)):
 
 
 def create_access_token(
-    data: dict, expires_delta: Optional[timedelta] = None, db: Session = None
+    user: User, expires_delta: Optional[timedelta] = None, db: Session = None
 ):
-    data["username"] = data["login"]
-    to_encode = {"username": data.get("username")}
-    username: str = to_encode.get("username")
-    user = db.query(User).filter(User.username == username).first()
-    if user is None:
-        # 因为此处的数据是从 GitHub 获取而非用户提交，因此可以信任，直接创建入库
-        db_user = User(username=data.get("login"))
-    else:
-        db_user = user
-    db_user.email = data.get("email", "")
-    db_user.nickname = data.get("name", "")
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+    to_encode = {"username": user.username}
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
