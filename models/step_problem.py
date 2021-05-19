@@ -16,5 +16,5 @@ class StepProblem(Base):
     problem_id = Column(Integer, ForeignKey("problems.id"))
     problem = relationship(Problem, backref="steps")
 
-    step_id = Column(Integer, ForeignKey("steps.id"))
+    step_id = Column(Integer, ForeignKey("steps.id", ondelete='CASCADE'))
     step = relationship("Step", backref="problems")
