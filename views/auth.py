@@ -92,6 +92,8 @@ def user_detail(username: str, db: Session = Depends(get_db)):
     data["username"] = user.username
     data["robot"] = user.robot
     for usr in user.step_users:
+        if not usr.step:
+            continue
         data["steps"].append(
             {
                 "id": usr.step.id,

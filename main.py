@@ -2,8 +2,10 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
 from logger import module_logger
+from models.bind_user import BindUser
 from models.db import get_db
 from models.solution import Solution
+from models.user import User
 from schemas.exception import SBSException, exception_handler
 from views.admin import router as admin_router
 from views.auth import router as auth_router
@@ -28,13 +30,16 @@ def read_root():
 
 
 @app.get("/solutions")
-def get_solutions(limit: int = 20, db: Session = Depends(get_db)):
+def get_solutions(limit: int = 20, username: str = None, db: Session = Depends(get_db)):
     if limit > 1000:
         limit = 1000
     resp = []
-    solutions = (
-        db.query(Solution).order_by(Solution.submitted_at.desc()).limit(limit).all()
-    )
+    query = db.query(Solution)
+    if username is not None:
+        user = db.query(User).filter_by(username=username).first()
+        bind_users = db.query(BindUser.id).filter_by(user=user)
+        query = query.filter(Solution.bind_user_id.in_(bind_users))
+    solutions = query.order_by(Solution.submitted_at.desc()).limit(limit).all()
     for solution in solutions:
         solution: Solution
         resp.append(
