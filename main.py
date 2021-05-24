@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
-
+from sqlalchemy import func
 from logger import module_logger
 from models.bind_user import BindUser
 from models.db import get_db
@@ -27,6 +27,24 @@ app.include_router(auth_router)
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+
+@app.get("/events")
+def get_events(username: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter_by(username=username).first()
+    if user is None:
+        raise SBSException(errmsg="user not found")
+    bind_users = db.query(BindUser.id).filter_by(user=user)
+    query = (
+        db.query(
+            func.count(Solution.id).label("count"),
+            func.strftime("%Y-%m-%d", Solution.submitted_at).label("date"),
+        )
+        .filter(Solution.bind_user_id.in_(bind_users))
+        .group_by(func.strftime("%Y-%m-%d", Solution.submitted_at))
+    )
+    res = query.all()
+    return res
 
 
 @app.get("/solutions")
