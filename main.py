@@ -35,14 +35,24 @@ def get_events(username: str, db: Session = Depends(get_db)):
     if user is None:
         raise SBSException(errmsg="user not found")
     bind_users = db.query(BindUser.id).filter_by(user=user)
-    query = (
-        db.query(
-            func.count(Solution.id).label("count"),
-            func.strftime("%Y-%m-%d", Solution.submitted_at).label("date"),
+    if db.bind.engine.name == "postgresql":
+        query = (
+            db.query(
+                func.count(Solution.id).label("count"),
+                func.to_char(Solution.submitted_at, "YYYY-MM-DD").label("date"),
+            )
+            .filter(Solution.bind_user_id.in_(bind_users))
+            .group_by(func.to_char(Solution.submitted_at, "YYYY-MM-DD"))
         )
-        .filter(Solution.bind_user_id.in_(bind_users))
-        .group_by(func.strftime("%Y-%m-%d", Solution.submitted_at))
-    )
+    else:
+        query = (
+            db.query(
+                func.count(Solution.id).label("count"),
+                func.strftime("%Y-%m-%d", Solution.submitted_at).label("date"),
+            )
+            .filter(Solution.bind_user_id.in_(bind_users))
+            .group_by(func.strftime("%Y-%m-%d", Solution.submitted_at))
+        )
     res = query.all()
     return res
 
