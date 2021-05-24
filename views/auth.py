@@ -128,6 +128,7 @@ async def register(request: LoginRequest, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+    logger.info(f'register new user: {user.username}')
     return {}
 
 
@@ -137,6 +138,7 @@ async def login(request: LoginRequest, db: Session = Depends(get_db)):
     if not user or not verify_password(request.password, user.hashed_password):
         raise SBSException(errmsg="用户名或密码错误")
     access_token = create_access_token(user, db=db)
+    logger.info(f'login user: {user.username}')
     return {"access_token": access_token, "token_type": "bearer"}
 
 
