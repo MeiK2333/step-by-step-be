@@ -27,6 +27,7 @@ def delete_group(
     db: Session = Depends(get_db),
     current_auth: Auth = Depends(get_current_admin),
 ):
+    logger.info(f'{current_auth.username}: delete group {group_id}')
     db.query(Group).filter_by(id=group_id).delete()
     db.commit()
     return {}
@@ -45,6 +46,7 @@ def edit_group(
     db: Session = Depends(get_db),
     current_auth: Auth = Depends(get_current_admin),
 ):
+    logger.info(f'{current_auth.username}: update group {group_id} to {request.json()}')
     group = db.query(Group).get(group_id)
     if not group:
         raise SBSException(errmsg="group not found")
@@ -66,6 +68,7 @@ def new_group(
     db: Session = Depends(get_db),
     current_auth: Auth = Depends(get_current_admin),
 ):
+    logger.info(f'{current_auth.username} create group {request.json()}')
     group = Group(name=request.name, code=request.code)
     db.add(group)
     db.commit()
@@ -85,6 +88,7 @@ def edit_step(
     db: Session = Depends(get_db),
     current_auth: Auth = Depends(get_current_admin),
 ):
+    logger.info(f'{current_auth.username} update step {step_id} to {request.json()}')
     group = db.query(Group).get(group_id)
     step = db.query(Step).get(step_id)
     if step.group != group:
@@ -102,6 +106,7 @@ def delete_step(
     db: Session = Depends(get_db),
     current_auth: Auth = Depends(get_current_admin),
 ):
+    logger.info(f'{current_auth.username} delete step {step_id}')
     group = db.query(Group).get(group_id)
     step = db.query(Step).get(step_id)
     if step.group != group:
@@ -124,6 +129,7 @@ def new_step(
     db: Session = Depends(get_db),
     current_auth: Auth = Depends(get_current_admin),
 ):
+    logger.info(f'{current_auth.username} create step {group_id} {request.json()}')
     group = db.query(Group).get(group_id)
     step = Step(name=request.name)
     step.group = group
@@ -180,9 +186,10 @@ def delete_step_user(
     step_id: int,
     step_user_id: int,
     db: Session = Depends(get_db),
-    _current_auth: Auth = Depends(get_current_admin),
+    current_auth: Auth = Depends(get_current_admin),
 ):
     """ 从指定的计划中删除指定的用户，注意，这并不会修改已绑定的账号关系（只是从当前计划中移除） """
+    logger.info(f'{current_auth.username} delete step {step_id} user {step_user_id}')
     db.query(StepUser).filter_by(id=step_user_id).delete()
     db.commit()
     return {}
@@ -227,6 +234,7 @@ def new_step_user(
         1. 如果 bind_user 不存在，则创建它
     4. 添加 user 与 bind_user 的关联，注意一个 bind_user 只能被一个 user 关联，即若该 bind_user 之前已经与其他 user 绑定，则此操作失败
     """
+    logger.info(f'{current_auth.username} add user {request.json()} to step {step_id}')
     # 检查参数
     group = db.query(Group).get(group_id)
     step = db.query(Step).get(step_id)
@@ -315,6 +323,9 @@ def edit_step_problems(
     为计划添加题目，将会全量覆盖之前的数据
     如果题目还不存在，则打印警告并创建该题目
     """
+    logger.info(f'{current_auth.username} update step problems')
+    for pro in request:
+        logger.info(f'{pro.json()}')
     # 检查参数
     group = db.query(Group).get(group_id)
     step = db.query(Step).get(step_id)
