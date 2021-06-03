@@ -22,6 +22,7 @@ multidict==5.1.0
 mysql==0.0.2
 mysqlclient==2.0.3
 passlib==1.7.4
+psycopg2==2.8.6
 pyasn1==0.4.8
 pycparser==2.20
 pydantic==1.8.2
