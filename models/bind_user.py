@@ -11,7 +11,7 @@ def bind_user_link(content):
         text("select * from sources where id = :source_id"),
         {"source_id": content.get_current_parameters()["source_id"]},
     )
-    name = ''
+    name = ""
     for cur in query:
         name = cur.name
     username = content.get_current_parameters()["username"]
@@ -21,6 +21,8 @@ def bind_user_link(content):
         return f"http://poj.org/userstatus?user_id={username}"
     elif name == "VJ":
         return f"https://vjudge.net/user/{username}"
+    elif name == "CF":
+        return f"https://codeforces.com/profile/{username}"
     return ""
 
 

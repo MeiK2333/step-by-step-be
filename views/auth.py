@@ -16,6 +16,7 @@ from schemas.auth import (
     get_password_hash,
 )
 from schemas.exception import SBSException
+from spider.cf.bind_user import login as cf_login
 from spider.poj.bind_user import login as poj_login
 from spider.sdut.bind_user import login as sdut_login
 from spider.vj.bind_user import login as vj_login
@@ -50,6 +51,10 @@ async def user_bind_user(
             raise SBSException(errmsg="用户名或密码错误")
     elif request.source == "POJ":
         resp = await poj_login(request.username, request.password)
+        if not resp:
+            raise SBSException(errmsg="用户名或密码错误")
+    elif request.source == "CF":
+        resp = await cf_login(request.username, request.password)
         if not resp:
             raise SBSException(errmsg="用户名或密码错误")
     else:
@@ -128,7 +133,7 @@ async def register(request: LoginRequest, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
-    logger.info(f'register new user: {user.username}')
+    logger.info(f"register new user: {user.username}")
     return {}
 
 
@@ -138,7 +143,7 @@ async def login(request: LoginRequest, db: Session = Depends(get_db)):
     if not user or not verify_password(request.password, user.hashed_password):
         raise SBSException(errmsg="用户名或密码错误")
     access_token = create_access_token(user, db=db)
-    logger.info(f'login user: {user.username}')
+    logger.info(f"login user: {user.username}")
     return {"access_token": access_token, "token_type": "bearer"}
 
 
