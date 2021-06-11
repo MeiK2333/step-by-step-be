@@ -67,7 +67,19 @@ def main():
 
         # 根据 group 获取，获取一天内有过登录的所有账号AC数据
         url = "https://vjudge.net/group/solveEntries/sdutsbs?queryWindowMillis=86400000"
-        resp = requests.get(url, cookies=cookies).json()
+        # 重试三次，因为 VJ 的接口可能超时
+        # 第一次超时，后续请求有可能命中缓存而成功
+        for i in range(3):
+            try:
+                resp = requests.get(url, cookies=cookies).json()
+            except Exception as ex:
+                logger.exception(ex)
+            else:
+                break
+        else:
+            logger.error('请求失败')
+            return
+
         for user, items in resp.items():
             fetched_user.add(user)
             if user not in bind_user_to_id.keys():
