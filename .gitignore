@@ -142,3 +142,5 @@ celerybeat-schedule.db
 init.py
 dist
 step-by-step.service
+
+.DS_Store

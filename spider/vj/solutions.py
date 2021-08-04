@@ -66,7 +66,7 @@ def main():
             bind_user_to_id[username] = bid
 
         # 根据 group 获取，获取一天内有过登录的所有账号AC数据
-        url = "https://vjudge.net/group/solveEntries/sdutsbs?queryWindowMillis=86400000"
+        url = "https://vjudge.net/group/solveEntries/sdutsbs?queryWindowMillis=7200000"
         # 重试三次，因为 VJ 的接口可能超时
         # 第一次超时，后续请求有可能命中缓存而成功
         for i in range(3):
