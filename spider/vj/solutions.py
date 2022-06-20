@@ -101,6 +101,23 @@ def main():
                     problem_id = next(problem_id).id
                 except StopIteration:  # 如果该提交所对应的题目不存在，则跳过该提交
                     logger.warning(f"无对应题目：row = {item}!!!")
+                    # 因为 vj 问题，题目可能获取不到，所以这里的操作修改为插入新题目
+                    title = "标题临时占位"
+                    link = f"https://vjudge.net/problem/{item[0]}-{item[1]}"
+                    connection.execute(
+                        text(
+                            "insert into problems "
+                            "(problem_id, source_id, title, link) "
+                            "values "
+                            "(:problem_id, :source_id, :title, :link)"
+                        ),
+                        {
+                            "problem_id": param["problem"],
+                            "title": title,
+                            "link": link,
+                            "source_id": source_id,
+                        },
+                    )
                     continue
                 param["bind_user_id"] = bind_user_to_id[user]
                 param["source_id"] = source_id

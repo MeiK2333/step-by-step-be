@@ -4,18 +4,19 @@ from sqlalchemy import create_engine, text
 from config import SQLALCHEMY_DATABASE_URL
 from logger import module_logger
 
-logger = module_logger("poj_solutions")
+logger = module_logger("poj_problems")
 
+PAGE_LIMIT = 100
 
 def main():
     page = 0
     result = []
     while True:
-        url = f"https://vjudge.net/problem/data?start={page * 10000}&length=10000&OJId=All&category=all"
+        url = f"https://vjudge.net/problem/data?start={page * PAGE_LIMIT}&length={PAGE_LIMIT}&OJId=All&category=all"
         logger.info(f"fetch page {page}")
         resp = requests.get(url).json()
         result.extend(resp["data"])
-        if len(resp["data"]) < 10000:
+        if len(resp["data"]) < PAGE_LIMIT:
             break
         page += 1
 
