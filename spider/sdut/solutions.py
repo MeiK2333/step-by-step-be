@@ -62,6 +62,7 @@ def get_solution(user_id: int, start: int, session: requests.Session):
         if len(rows) == 0:
             break
         for row in rows:
+            start = max(row["solutionId"], start)
             res = to_result_enum(row["result"])
             if res == ResultEnum.Unknown:  # 如果遇到未知的数据，先跳过
                 logger.warning(f"crawl result {res}, continue!")
@@ -69,7 +70,6 @@ def get_solution(user_id: int, start: int, session: requests.Session):
             if row.get('competition') is not None:  # 忽略比赛的提交
                 continue
             result.append(row)
-            start = max(row["solutionId"], start)
     return result
 
 
