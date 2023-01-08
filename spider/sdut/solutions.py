@@ -16,7 +16,7 @@ def get_csrf(session: requests.Session):
     session_url = "https://acm.sdut.edu.cn/onlinejudge3/api/getSession?t=" + str(
         time.time() * 1000
     )
-    resp = session.get(session_url)
+    resp = session.get(session_url, verify=False)
     csrf = resp.cookies["csrfToken"]
     return csrf
 
@@ -26,7 +26,7 @@ def login(username: str, password: str):
     csrf = get_csrf(session)
     session.headers.update({"x-csrf-token": csrf})
     login_url = "https://acm.sdut.edu.cn/onlinejudge3/api/login"
-    session.post(login_url, json={"loginName": username, "password": password})
+    session.post(login_url, json={"loginName": username, "password": password}, verify=False)
     return session
 
 
@@ -39,7 +39,7 @@ def get_userid_by_username(username: str, session: requests.Session) -> int:
         "limit": 20,
     }
 
-    resp = session.post(url, json=data)
+    resp = session.post(url, json=data, verify=False)
     for row in resp.json()["data"]["rows"]:
         if row["username"].lower() == username.lower():
             return row["userId"]
@@ -57,7 +57,7 @@ def get_solution(user_id: int, start: int, session: requests.Session):
             "order": [["solutionId", "DESC"]],
             "userId": user_id,
         }
-        resp = session.post(url, json=data)
+        resp = session.post(url, json=data, verify=False)
         rows = resp.json()["data"]["rows"][::-1]
         if len(rows) == 0:
             break

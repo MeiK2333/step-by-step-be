@@ -13,7 +13,7 @@ def get_csrf(session: requests.Session):
     session_url = "https://acm.sdut.edu.cn/onlinejudge3/api/getSession?t=" + str(
         time.time() * 1000
     )
-    resp = session.get(session_url)
+    resp = session.get(session_url, verify=False)
     csrf = resp.cookies["csrfToken"]
     return csrf
 
@@ -29,7 +29,7 @@ def main():
     while True:
         data = {"limit": 20, "page": page}
         logger.info(f"get page {page}")
-        resp = session.post(url, json=data).json()
+        resp = session.post(url, json=data, verify=False).json()
         result.extend(resp["data"]["rows"])
         if len(resp["data"]["rows"]) < 20:
             break
