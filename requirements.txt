@@ -10,7 +10,7 @@ certifi==2022.12.7
 cffi==1.14.5
 chardet==4.0.0
 click==7.1.2
-cryptography==39.0.1
+cryptography==42.0.0
 ecdsa==0.14.1
 fastapi==0.109.1
 greenlet==1.0.0
