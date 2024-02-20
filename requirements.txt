@@ -37,6 +37,6 @@ soupsieve==2.2.1
 SQLAlchemy==1.4.1
 starlette==0.25.0
 typing-extensions==3.7.4.3
-urllib3==1.26.5
+urllib3==1.26.18
 uvicorn==0.13.4
 yarl==1.6.3
