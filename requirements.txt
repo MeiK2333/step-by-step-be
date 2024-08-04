@@ -19,8 +19,6 @@ idna==2.10
 Mako==1.2.2
 MarkupSafe==1.1.1
 multidict==5.1.0
-mysql==0.0.2
-mysqlclient==2.0.3
 passlib==1.7.4
 psycopg2==2.8.6
 pyasn1==0.4.8
