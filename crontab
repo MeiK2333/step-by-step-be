@@ -1,0 +1,5 @@
+PYTHONPATH=/work
+0 * * * * /usr/local/bin/python /work/spider/sdut/solutions.py >> /work/logs/sdut.log 2>&1
+0 * * * * /usr/local/bin/python /work/spider/vj/solutions.py   >> /work/logs/vj.log 2>&1
+0 0 * * * /usr/local/bin/python /work/spider/sdut/problems.py  >> /work/logs/sdut.log 2>&1
+0 0 * * * /usr/local/bin/python /work/spider/vj/problems.py    >> /work/logs/vj.log 2>&1
